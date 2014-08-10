@@ -1,0 +1,11 @@
+<ul{% if root %}class="nav nav-pills nav-stacked"{% endif %}>
+    {% for page in pages %}
+    <li>
+        <a href="/{{ page.link }}.html">{{ page.name }}</a>
+        {% if page.children %}
+        {% assign pages = page.children %}
+        {% include menu.html %}
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
