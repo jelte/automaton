@@ -57,6 +57,7 @@ class DryRunServerTest extends \PHPUnit_Framework_TestCase
     {
         $this->dryRunServer->privateKey('~/.ssh/id_rsa');
         $this->dryRunServer->passPhrase('passPhrase');
+        $this->assertTrue(true);
     }
 
     /**

@@ -12,7 +12,7 @@ class TaskTest extends \PHPUnit_Framework_TestCase
 
     protected $task;
 
-    public static function test()
+    public static function dummy()
     {
 
     }
@@ -87,7 +87,7 @@ class TaskTest extends \PHPUnit_Framework_TestCase
      */
     public function createdWithStaticMethod()
     {
-        $task = new Task('deploy', '', __CLASS__.'::test');
+        $task = new Task('deploy', '', __CLASS__.'::dummy');
         $this->assertInstanceOf('ReflectionMethod',$task->getCallable());
     }
 
