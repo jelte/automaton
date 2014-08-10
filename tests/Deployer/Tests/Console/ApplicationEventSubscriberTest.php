@@ -44,7 +44,11 @@ class ApplicationEventSubscriberTest extends \PHPUnit_Framework_TestCase
         $task->expects($this->once())->method('getName')->willReturn('test');
         $deployer->expects($this->once())->method('all')->willReturn(array('test' => $task));
         $deployer->expects($this->once())->method('get')->willReturn($this->getMock('Deployer\Runner\Runner'));
-        $container->expects($this->any())->method('get')->willReturnOnConsecutiveCalls(
+        $container->expects($this->any())->method('get')->withConsecutive(
+            array($this->equalTo('deployer')),
+            array($this->equalTo('event_dispatcher')),
+            array($this->equalTo('deployer'))
+        )->willReturnOnConsecutiveCalls(
             $deployer, $eventDispatcher, $deployer
         );
         $this->eventSubscriber->onLoad($event);
