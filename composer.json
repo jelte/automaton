@@ -1,0 +1,32 @@
+{
+    "name": "jelte/php-deployer",
+    "description": "PHP Deployment Tool",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jelte Steijaert",
+            "email": "jelte@khepri.be"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Deployer\\": "src/Deployer/"
+        }
+    },
+    "bin": [
+        "bin/dep"
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "symfony/dependency-injection": "~2.5",
+        "symfony/config": "~2.5",
+        "symfony/event-dispatcher": "~2.5",
+        "symfony/finder": "~2.5",
+        "symfony/console": "~2.5",
+        "phpseclib/phpseclib": "0.3.*@dev",
+        "kherge/amend": "~3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.2"
+    }
+}

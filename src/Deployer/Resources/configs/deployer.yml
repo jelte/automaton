@@ -1,0 +1,19 @@
+imports:
+    - { resource: parameters.xml }
+
+services:
+  event_dispatcher:
+    class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
+    arguments: [@service_container]
+  deployer:
+    class: Deployer\Deployer
+    arguments: [@plugin_manager]
+  plugin_manager:
+    class: Deployer\Plugin\PluginManager
+  deployer.event_subscriber.application:
+    class: Deployer\Console\ApplicationEventSubscriber
+    tags:
+      - { name: kernel.event_subscriber, event: deployer.load }
+
+deployer:
+  runner:

@@ -1,0 +1,10 @@
+services:
+  deployer.plugin.stage:
+    class: Deployer\Stage\StagePlugin
+  deployer.event_subscriber.stage:
+    class: Deployer\Stage\StagePluginEventSubscriber
+    arguments: [@deployer.plugin.stage]
+    tags:
+      - { name: kernel.event_subscriber, event: deployer.task_command.configure }
+      - { name: kernel.event_subscriber, event: deployer.runner.pre_run }
+      - { name: kernel.event_subscriber, event: deployer.runner.post_run }

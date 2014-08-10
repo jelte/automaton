@@ -1,0 +1,17 @@
+imports:
+  - { resource: src/Deployer/Resources/configs/deployer.yml }
+
+deployer:
+  server:
+    develop:
+      host: www.khepri.be
+      login: khepri
+  stage:
+    develop:
+      servers: [develop_1, develop_2]
+      options: {branch: develop}
+    stage:
+      servers: [stage_1]
+  task:
+    _config: src/Deployer/Resources/configs/task.yml
+    debug: Deployer\Recipe\Common::debug
