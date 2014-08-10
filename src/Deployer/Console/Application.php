@@ -5,7 +5,6 @@ namespace Deployer\Console;
 
 use Deployer\Config\ConfigurationLoader;
 use Deployer\Console\Command\Event\ApplicationEvent;
-use Deployer\DependencyInjection\DeployerExtension;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -37,10 +36,6 @@ class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        if (version_compare(PHP_VERSION, '5.4', '<')) {
-            $output->writeln('<warning>PHP Deployer only officially supports PHP 5.4 and above, you will most likely encounter problems with your PHP ' . PHP_VERSION . ', upgrading is strongly recommended.</warning>');
-        }
-
         if ($input->hasParameterOption(array('--profile'))) {
             $startTime = microtime(true);
         }
