@@ -1,7 +1,16 @@
 language: php
+
 php:
   - 5.5
   - 5.4
+
 before_script:
   - composer self-update
   - composer install --dev
+
+script:
+ - mkdir -p build/logs
+ - phpunit -c phpunit.dist.xml --coverage-clover build/logs/clover.xml
+
+after_script:
+ - php vendor/bin/coveralls -v
