@@ -17,7 +17,7 @@ PHP Deployer is developed for 5.4 and up, no support is offered for earlier vers
 Documentation
 -------------
 
-Incoming 
+Documentation can be found on [jelte.github.io/php-deployer](http://jelte.github.io/php-deployer/)
 
 License
 -------
