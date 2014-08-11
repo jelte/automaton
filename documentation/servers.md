@@ -4,6 +4,15 @@ title: Documentation - Servers
 ---
 # Servers
 
+## CLI Options
+
+When the ServerPlugin is loaded the option `--server` will be enabled. 
+This allows you to run all tasks on a specific server.
+
+~~~
+vendor/bin/deployer <task> --server=<server-name>
+~~~
+
 ## Defining servers
 ~~~
 deployer:

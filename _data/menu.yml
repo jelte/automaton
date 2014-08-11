@@ -3,6 +3,9 @@
   link: documentation
   children:
     -
+      name: Configuration
+      link: documentation/configuration
+    -
       name: Servers
       link: documentation/servers
     -
