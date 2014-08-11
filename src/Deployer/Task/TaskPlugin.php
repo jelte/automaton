@@ -49,4 +49,13 @@ class TaskPlugin extends AbstractPlugin
         }
         return $this->task($name, $task);
     }
+
+    /**
+     * @param $task
+     * @param $before
+     */
+    public function before($task, $before)
+    {
+
+    }
 } 

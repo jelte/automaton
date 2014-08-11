@@ -9,8 +9,6 @@ use Deployer\Utils\Uri;
 
 class ServerPlugin extends AbstractPlugin
 {
-    static $objectHash = null;
-
     protected $serverTypes;
 
     /**
