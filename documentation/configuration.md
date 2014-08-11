@@ -2,7 +2,7 @@
 layout: layout
 title: Documentation - Configuration
 ---
-# Configuration
+## Configuration
 
 PHP Deployer uses Symfony's Dependency Injection Container to define its configuration.
 So configuring PHP Deployer is very simular to configuring Symfony.

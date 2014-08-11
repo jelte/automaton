@@ -2,11 +2,13 @@
 layout: layout
 title: Documentation - Stages
 ---
-# Stages
+## Stages
 
-## CLI Options
+### CLI Options
 
-The Stages Plugin will add a `stage` argument.
+The StagesPlugin will add a `stage` argument. 
+
+*Remember that plugins are lazy-loaded, so if no stages are defined the stage argument will not be available*
 
 this will change the command line to 
 
@@ -14,7 +16,7 @@ this will change the command line to
 vendor/bin/deployer <stage> <task>
 ~~~
 
-## Defining stages
+### Defining stages
 ~~~
 deployer:
   stage:

@@ -2,7 +2,7 @@
 layout: layout
 title: Documentation - Tasks
 ---
-# Tasks
+## Tasks
 
 A task can be any callable function:
 
@@ -10,7 +10,7 @@ A task can be any callable function:
 - static class method: `MyClass::methodName`
 - function name: `functionName` *not recommended*
 
-## Creating new Tasks
+### Creating new Tasks
 
 Any valid method or function can be a Task.
 
@@ -23,7 +23,7 @@ function mytask(InputInterface $input, OutputInterface $output, ServerInterface 
 
 *note: Using functions is not recommended, but it is possible. It is better to use a static method.*
 
-### Configuration
+#### Configuration
 
 ~~~
 deployer:
@@ -33,10 +33,10 @@ deployer:
 
 *note: Method calls haven't been tested yet*
 
-## Grouping Tasks
+### Grouping Tasks
 
 
-### Configuration
+#### Configuration
 
 ~~~
 deployer:
@@ -44,11 +44,11 @@ deployer:
     deploy_server: deploy
 ~~~
 
-## Alias
+### Alias
 
 An alias is a complete copy of a task including its Before and After tasks, but allows you to add additional Before and After tasks.
 
-### Configuration
+#### Configuration
 
 ~~~
 deployer:

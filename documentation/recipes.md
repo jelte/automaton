@@ -2,10 +2,10 @@
 layout: layout
 title: Documentation - Recipes
 ---
-# Recipes
+## Recipes
 Coming soon! 
 
-## Defining tasks
+### Defining tasks
 ~~~
 deployer:
   recipe:

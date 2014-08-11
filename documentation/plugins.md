@@ -2,7 +2,7 @@
 layout: layout
 title: Documentation - Plugins
 ---
-# Plugins
+## Plugins
 
 Deployer is completely made up of plugins.
 Plugins may allow instances to be defined through configuration, cli options or arguments to be added, ...
@@ -14,12 +14,12 @@ default plugins:
 - **task**: Allows tasks to be defined
 - **runner**: Has a single instance of the Runner which will run the tasks.
 
-## Creating a new Plugin
+### Creating a new Plugin
 
 Creating a new plugin is simple.
 You just have to create the Plugin class, a configuration file and a subscriber.
 
-## The Plugin class
+### The Plugin class
 
 The plugin class is responsible for exposing methods in the API.
 the following will expose `Deployer->my($name)` and register a new `My` instance.
@@ -59,7 +59,7 @@ class MyPlugin extends AbstractPlugin
 ~~~
 
 
-## Configuring the plugin
+### Configuring the plugin
 
 This is done easily by defining a configuration file.
 
@@ -72,7 +72,7 @@ services:
 note: Plugins are lazy-loaded, see "loading the plugin"
 
 
-## Making use of your plugin
+### Making use of your plugin
 
 At the moment there are 3 points in the execution that can be influenced by a plugin:
 
@@ -136,7 +136,7 @@ Here we simply restore all servers to revert the --server option
 ~~~
 
 
-## Loading your new Plugin
+### Loading your new Plugin
 
 add the following to your deploy configuration file under `deployer`
 
