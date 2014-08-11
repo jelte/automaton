@@ -183,6 +183,11 @@ footer {
   bottom:50px;
 }
 
+ul.roadmap li.list-group-item {
+    border: 0;
+    padding: 0;
+}
+
 @media print, screen and (max-width: 960px) {
   
   div.wrapper {

@@ -1,0 +1,26 @@
+releases:
+  -
+    name: pre-release
+    sections:
+      -
+        name: General
+        todos:
+          -
+            title: Basic functionality (Server, Tasks, Runner)
+            done: yes
+          -
+            title: Stage Plugin
+            done: yes
+          -
+            title: Running tasks locally
+          -
+            title: Sharing variables between tasks ( Runtime Environment )
+          -
+            title: Implement Recipes
+      -
+        name: SSH
+        todos:
+          -
+            title: Test PhpSeclib Server class
+          -
+            title: define gateways ( SSH tunnels )
