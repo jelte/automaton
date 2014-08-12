@@ -9,9 +9,13 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class ConfigurationLoader {
 
@@ -20,12 +24,12 @@ class ConfigurationLoader {
 
     protected $container;
 
+    protected $stopWatch;
+
     public function __construct(ContainerBuilder $container = null, $cwd = null)
     {
         $this->cwd = null == $cwd?getcwd():$cwd;
         $this->container = null === $container?new ContainerBuilder():$container;
-        $this->addCompilerPass();
-        $this->registerExtensions();
     }
 
     protected function registerExtensions()
@@ -49,10 +53,20 @@ class ConfigurationLoader {
         ));
     }
 
-    public function load($config)
+    public function load($config, Stopwatch $stopwatch, $debug = false)
     {
+        $this->addCompilerPass();
+        $this->registerExtensions();
+        $this->container->set('debug.stopwatch', $stopwatch);
+
         $this->container->get('resolver')->resolve($config)->load($config);
 
+        if ($debug) {
+            $this->container->setDefinition('automaton.event_dispatcher', new Definition('Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher', array(new Reference('service_container'))));
+            $this->container->setDefinition('event_dispatcher', new Definition('Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher', array(new Reference('automaton.event_dispatcher'), new Reference('debug.stopwatch'))));
+        } else {
+            $this->container->setDefinition('event_dispatcher', new Definition('Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher', array(new Reference('service_container'))));
+        }
         $this->container->compile();
 
         return $this->container;

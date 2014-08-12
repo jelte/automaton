@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "885b7560c5aeeae4cc86fd6de18f5aa6",
+    "hash": "c6232ce61b0606f1c4b87517baf60514",
     "packages": [
         {
             "name": "herrera-io/json",
@@ -755,6 +755,100 @@
             "description": "Symfony Finder Component",
             "homepage": "http://symfony.com",
             "time": "2014-07-28 13:20:46"
+        },
+        {
+            "name": "symfony/process",
+            "version": "v2.5.3",
+            "target-dir": "Symfony/Component/Process",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Process.git",
+                "reference": "e0997d2a9a1a763484b34b989900b61322a9b056"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/e0997d2a9a1a763484b34b989900b61322a9b056",
+                "reference": "e0997d2a9a1a763484b34b989900b61322a9b056",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Process\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Symfony Process Component",
+            "homepage": "http://symfony.com",
+            "time": "2014-08-05 09:00:40"
+        },
+        {
+            "name": "symfony/stopwatch",
+            "version": "v2.5.3",
+            "target-dir": "Symfony/Component/Stopwatch",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Stopwatch.git",
+                "reference": "086c8c98c3016f59f5e6e7b15b751c2384b311e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Stopwatch/zipball/086c8c98c3016f59f5e6e7b15b751c2384b311e5",
+                "reference": "086c8c98c3016f59f5e6e7b15b751c2384b311e5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Stopwatch\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Symfony Stopwatch Component",
+            "homepage": "http://symfony.com",
+            "time": "2014-08-06 06:44:37"
         }
     ],
     "packages-dev": [
@@ -1723,53 +1817,6 @@
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
             "time": "2014-03-07 15:35:33"
-        },
-        {
-            "name": "symfony/stopwatch",
-            "version": "v2.5.3",
-            "target-dir": "Symfony/Component/Stopwatch",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/Stopwatch.git",
-                "reference": "086c8c98c3016f59f5e6e7b15b751c2384b311e5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Stopwatch/zipball/086c8c98c3016f59f5e6e7b15b751c2384b311e5",
-                "reference": "086c8c98c3016f59f5e6e7b15b751c2384b311e5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.5-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Symfony\\Component\\Stopwatch\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Symfony Stopwatch Component",
-            "homepage": "http://symfony.com",
-            "time": "2014-08-06 06:44:37"
         },
         {
             "name": "symfony/yaml",

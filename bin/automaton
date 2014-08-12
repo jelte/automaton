@@ -1,6 +1,9 @@
 #!/usr/bin/env php
 <?php
+$start = microtime();
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$application = new \Automaton\Console\Application();
+$application = new \Automaton\Console\Application('Automaton', '0.1.0');
 $application->run();
+
+print('Memory usage: ' . round(memory_get_usage() / 1024 / 1024, 2) . 'MB (peak: ' . round(memory_get_peak_usage() / 1024 / 1024, 2) . 'MB), time: ' . round((microtime(true)-$start)*1000, 2).  'ms');

@@ -8,27 +8,19 @@ use Automaton\Console\Application;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
-    protected $input;
-
-    protected $output;
+    protected $input, $output, $configurationLoader, $stopwatch, $container, $eventDispatcher;
 
     /**
      * @var Application
      */
     protected $application;
 
-    protected $configurationLoader;
-
-    protected $container;
-
-    protected $eventDispatcher;
-
     public function setUp()
     {
         $this->configurationLoader = $this->getMock('Automaton\Config\ConfigurationLoader');
         $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
         $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-
+        $this->stopwatch = $this->getMock('Symfony\Component\Stopwatch\Stopwatch');
         $this->input = $this->getMock('Symfony\Component\Console\Input\InputInterface');
         $this->output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
         $this->application = new Application('Automaton', 'TEST', $this->configurationLoader);
@@ -43,7 +35,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $this->configurationLoader->expects($this->once())->method('load')->willReturn($this->container);
 
-        $this->container->expects($this->exactly(2))->method('get')->with('event_dispatcher')->willReturn($this->eventDispatcher);
+        $this->container->expects($this->once())->method('get')->with('event_dispatcher')->willReturn($this->eventDispatcher);
 
         $this->eventDispatcher->expects($this->atLeastOnce())->method('dispatch');
 
@@ -64,14 +56,13 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $this->onConsecutiveCalls(true, false, false)
         );
 
-        $this->output->expects($this->once())->method('writeln');
+        $this->output->expects($this->any())->method('writeln');
 
         $this->configurationLoader->expects($this->once())->method('load')->willReturn($this->container);
 
-        $this->container->expects($this->exactly(2))->method('get')->with('event_dispatcher')->willReturn($this->eventDispatcher);
+        $this->container->expects($this->once())->method('get')->with('event_dispatcher')->willReturn($this->eventDispatcher);
 
-
-        $this->eventDispatcher->expects($this->atLeastOnce())->method('dispatch');
+        $this->eventDispatcher->expects($this->atleastOnce())->method('dispatch');
 
         $this->application->doRun($this->input, $this->output);
     }

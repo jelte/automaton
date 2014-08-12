@@ -2,15 +2,23 @@ imports:
     - { resource: parameters.xml }
 
 services:
-  event_dispatcher:
-    class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
-    arguments: [@service_container]
   automaton:
     class: Automaton\Automaton
-    arguments: [@plugin_manager]
-  plugin_manager:
+    arguments: [@automaton.plugin_manager]
+  automaton.plugin_manager:
     class: Automaton\Plugin\PluginManager
   automaton.event_subscriber.application:
     class: Automaton\Console\ApplicationEventSubscriber
     tags:
       - { name: kernel.event_subscriber, event: automaton.load }
+  automaton.system:
+    class: Automaton\System\System
+    arguments: [@automaton.filesystem]
+  automaton.filesystem:
+    class: Automaton\System\Filesystem
+  automaton.event_subscriber.system:
+    class: Automaton\System\SystemPluginEventSubscriber
+    arguments: [@automaton.system]
+    tags:
+      - { name: kernel.event_subscriber, event: automaton.task_command.configure }
+      - { name: kernel.event_subscriber, event: automaton.task.pre_run }

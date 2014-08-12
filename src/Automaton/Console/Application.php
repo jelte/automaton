@@ -10,9 +10,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class Application extends BaseApplication
 {
+    protected $stopwatch;
     protected $configuration;
 
     /**
@@ -22,6 +24,7 @@ class Application extends BaseApplication
 
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN', ConfigurationLoader $configuration = null)
     {
+        $this->stopwatch = new Stopwatch();
         parent::__construct($name, $version);
         $this->configuration = null == $configuration?new ConfigurationLoader():$configuration;
     }
@@ -36,23 +39,16 @@ class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        if ($input->hasParameterOption(array('--profile'))) {
-            $startTime = microtime(true);
-        }
+        $this->container = $this->configuration->load($input->getParameterOption(array('--config', '-c'), 'deploy.yml'), $this->stopwatch, $input->hasParameterOption(array('--profile')));
 
-        $this->container = $this->configuration->load($input->getParameterOption(array('--config', '-c'), 'deploy.yml'));
+        $eventDispatcher = $this->container->get('event_dispatcher');
 
-        $this->setDispatcher($this->container->get('event_dispatcher'));
+        $this->setDispatcher($eventDispatcher);
 
-        $this->container->get('event_dispatcher')->dispatch('automaton.load', new ApplicationEvent($this, $input, $output));
+        /** @var \Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher $eventDispatcher */
+        $eventDispatcher->dispatch('automaton.load', new ApplicationEvent($this, $input, $output));
 
-        $result = parent::doRun($input, $output);
-
-        if (isset($startTime)) {
-            $output->writeln('<info>Memory usage: ' . round(memory_get_usage() / 1024 / 1024, 2) . 'MB (peak: ' . round(memory_get_peak_usage() / 1024 / 1024, 2) . 'MB), time: ' . round(microtime(true) - $startTime, 2) . 's');
-        }
-
-        return $result;
+        return parent::doRun($input, $output);
     }
 
     /**
