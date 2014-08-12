@@ -71,7 +71,7 @@ class TaskPluginTest extends \PHPUnit_Framework_TestCase
     {
         $test = $this->plugin->task('test', function() {});
         $this->plugin->task('test:init', function() {});
-        $this->plugin->before('test', 'test:init');
+        $this->plugin->before('test:init', 'test');
         $this->assertCount(1, $test->getBefore());
     }
 
@@ -82,7 +82,7 @@ class TaskPluginTest extends \PHPUnit_Framework_TestCase
     {
         $test = $this->plugin->task('test', function() {});
         $this->plugin->task('test:init', function() {});
-        $this->plugin->after('test', 'test:init');
+        $this->plugin->after('test:init', 'test');
         $this->assertCount(1, $test->getAfter());
     }
 }
