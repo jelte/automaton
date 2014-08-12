@@ -8,10 +8,16 @@ automaton:
       login: khepri
   stage:
     develop:
-      servers: [develop_1, develop_2]
+      servers: [develop, develop_2]
       options: {branch: develop}
     stage:
       servers: [stage_1]
   task:
     _config: src/Automaton/Resources/configs/task.yml
-    debug: Automaton\Recipe\Common::debut
+    debug: Automaton\Recipe\Common::debug
+    debug:before: Automaton\Recipe\Common::debug
+    debug:after: Automaton\Recipe\Common::debug
+  before:
+    debug:before: debug
+  after:
+    debug:after: debug

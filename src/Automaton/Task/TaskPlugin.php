@@ -37,7 +37,6 @@ class TaskPlugin extends AbstractPlugin
      * @param $name
      * @param $task
      * @return Alias
-     * @throws \Automaton\Exception\TaskNotFoundException
      * @throws \Automaton\Exception\InvalidArgumentException
      */
     public function alias($name, $task)
@@ -45,24 +44,27 @@ class TaskPlugin extends AbstractPlugin
         if (!($task instanceof TaskInterface)) {
             $task = $this->get($task);
         }
+
         return $this->task($name, $task);
     }
 
     /**
      * @param $task
      * @param $before
+     * @throws \Automaton\Exception\InvalidArgumentException
      */
     public function before($task, $before)
     {
-        $this->get($task)->before($this->get($before));
+        $this->get($before)->before($this->get($task));
     }
 
     /**
      * @param $task
      * @param $after
+     * @throws \Automaton\Exception\InvalidArgumentException
      */
     public function after($task, $after)
     {
-        $this->get($task)->after($this->get($after));
+        $this->get($after)->after($this->get($task));
     }
 } 

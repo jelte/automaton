@@ -49,12 +49,12 @@ class StagePluginEventSubscriber extends AbstractPluginEventSubscriber
 
             $stageServers = $stage->getServers();
             $servers = [];
+
             foreach ( $environment->get('servers', array()) as $serverName => $server ) {
                 if ( in_array($serverName, $stageServers) ) {
                     $servers[$serverName] = $server;
                 }
             }
-
             $environment->set('stage', $stage);
             $environment->set('servers', $servers);
         }
