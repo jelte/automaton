@@ -1,3 +1,0 @@
-services:
-  deployer.plugin.task:
-    class: Deployer\Task\TaskPlugin

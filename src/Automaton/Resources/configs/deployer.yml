@@ -1,0 +1,16 @@
+imports:
+    - { resource: parameters.xml }
+
+services:
+  event_dispatcher:
+    class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
+    arguments: [@service_container]
+  automaton:
+    class: Automaton\Automaton
+    arguments: [@plugin_manager]
+  plugin_manager:
+    class: Automaton\Plugin\PluginManager
+  automaton.event_subscriber.application:
+    class: Automaton\Console\ApplicationEventSubscriber
+    tags:
+      - { name: kernel.event_subscriber, event: automaton.load }

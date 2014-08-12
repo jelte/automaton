@@ -5,7 +5,7 @@
          verbose="true">
 
     <testsuites>
-        <testsuite name="Deployer">
+        <testsuite name="Automoton">
             <directory>tests/</directory>
         </testsuite>
     </testsuites>

@@ -1,6 +1,6 @@
 {
-    "name": "jelte/php-deployer",
-    "description": "PHP Deployment Tool",
+    "name": "jelte/php-automoton",
+    "description": "More than just a Deployment Tool",
     "license": "MIT",
     "authors": [
         {
@@ -10,7 +10,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Deployer\\": "src/Deployer/"
+            "Automaton\\": "src/Automaton/"
         }
     },
     "bin": [

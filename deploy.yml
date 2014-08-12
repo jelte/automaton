@@ -1,7 +1,7 @@
 imports:
-  - { resource: src/Deployer/Resources/configs/deployer.yml }
+  - { resource: src/Automoton/Resources/configs/automoton.yml }
 
-deployer:
+automoton:
   server:
     develop:
       host: www.khepri.be
@@ -13,5 +13,5 @@ deployer:
     stage:
       servers: [stage_1]
   task:
-    _config: src/Deployer/Resources/configs/task.yml
-    debug: Deployer\Recipe\Common::debug
+    _config: src/Automoton/Resources/configs/task.yml
+    debug: Automoton\Recipe\Common::debug

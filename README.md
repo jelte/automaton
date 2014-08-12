@@ -1,23 +1,23 @@
-PHP Deployer
+PHP Automoton
 ============
-[![Build Status](https://travis-ci.org/jelte/php-deployer.svg?branch=master)](https://travis-ci.org/jelte/php-deployer)
-[![Coverage Status](https://img.shields.io/coveralls/jelte/php-deployer.svg)](https://coveralls.io/r/jelte/php-deployer?branch=master)
+[![Build Status](https://travis-ci.org/jelte/php-automoton.svg?branch=master)](https://travis-ci.org/jelte/php-automoton)
+[![Coverage Status](https://img.shields.io/coveralls/jelte/php-automoton.svg)](https://coveralls.io/r/jelte/php-automoton?branch=master)
 
 Introduction
 ------------
 
-PHP Deployer wsa developed as a stand-alone tool to be included in the composer configuration of your projects.
+PHP Automoton wsa developed as a stand-alone tool to be included in the composer configuration of your projects.
 The main reason for this is that deploy tools evolve and configuration formats change and we wanted a tool that we could keep in sync.
 
 Requirements
 ------------
 
-PHP Deployer is developed for 5.4 and up, no support is offered for earlier version.
+PHP Automoton is developed for 5.4 and up, no support is offered for earlier version.
 
 Documentation
 -------------
 
-Documentation can be found on [jelte.github.io/php-deployer](http://jelte.github.io/php-deployer/)
+Documentation can be found on [jelte.github.io/php-automoton](http://jelte.github.io/php-automoton/)
 
 License
 -------

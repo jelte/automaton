@@ -1,0 +1,3 @@
+services:
+  automaton.plugin.task:
+    class: Automaton\Task\TaskPlugin

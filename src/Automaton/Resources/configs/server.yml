@@ -1,0 +1,12 @@
+services:
+  automaton.plugin.server:
+    class: Automaton\Server\ServerPlugin
+    arguments:
+      - {ssh: Automaton\Server\SshServer}
+  automaton.event_subscriber.server:
+    class: Automaton\Server\ServerPluginEventSubscriber
+    arguments: [@automaton.plugin.server]
+    tags:
+      - { name: kernel.event_subscriber, event: automaton.task_command.configure }
+      - { name: kernel.event_subscriber, event: automaton.runner.pre_run }
+      - { name: kernel.event_subscriber, event: automaton.runner.post_run }

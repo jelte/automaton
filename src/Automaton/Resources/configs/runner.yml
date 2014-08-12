@@ -1,0 +1,12 @@
+services:
+  automaton.plugin.runner:
+    class: Automaton\Runner\RunnerPlugin
+  automaton.runner:
+    class: Automaton\Runner\Runner
+  automaton.event_subscriber.runner:
+    class: Automaton\Runner\RunnerPluginEventSubscriber
+    arguments: [@automaton.plugin.runner]
+    tags:
+      - { name: kernel.event_subscriber, event: automaton.task_command.configure }
+      - { name: kernel.event_subscriber, event: automaton.runner.pre_run }
+      - { name: kernel.event_subscriber, event: automaton.runner.post_run }

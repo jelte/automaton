@@ -1,0 +1,10 @@
+services:
+  automaton.plugin.stage:
+    class: Automaton\Stage\StagePlugin
+  automaton.event_subscriber.stage:
+    class: Automaton\Stage\StagePluginEventSubscriber
+    arguments: [@automaton.plugin.stage]
+    tags:
+      - { name: kernel.event_subscriber, event: automaton.task_command.configure }
+      - { name: kernel.event_subscriber, event: automaton.runner.pre_run }
+      - { name: kernel.event_subscriber, event: automaton.runner.post_run }
