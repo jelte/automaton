@@ -23,6 +23,8 @@ class RuntimeEnvironment
     {
         $this->set('input', $input);
         $this->set('output', $output);
+        $this->set('runtimeEnvironment', $this);
+        $this->set('env', $this);
     }
 
     /**
