@@ -4,15 +4,14 @@ title: Documentation - Plugins
 ---
 ## Plugins
 
-Deployer is completely made up of plugins.
+automaton is completely made up of plugins.
 Plugins may allow instances to be defined through configuration, cli options or arguments to be added, ...
 
 default plugins:
 
-- **server**: Allows servers to be defined and adds the --server option 
+- **server**: Allows servers to be defined and adds the --server and --dry-run option 
 - **stage**: Allows stages to be defined and adds the "stage" argument
 - **task**: Allows tasks to be defined
-- **runner**: Has a single instance of the Runner which will run the tasks.
 
 ### Creating a new Plugin
 
@@ -22,7 +21,7 @@ You just have to create the Plugin class, a configuration file and a subscriber.
 ### The Plugin class
 
 The plugin class is responsible for exposing methods in the API.
-the following will expose `Deployer->my($name)` and register a new `My` instance.
+the following will expose `automaton->my($name)` and register a new `My` instance.
 
 ~~~
 class MyPlugin extends AbstractPlugin
@@ -65,7 +64,7 @@ This is done easily by defining a configuration file.
 
 ~~~
 services:
-  deployer.plugin.my:
+  automaton.plugin.my:
     class: MyNamespace\MyPlugin
 ~~~
 
@@ -76,9 +75,10 @@ note: Plugins are lazy-loaded, see "loading the plugin"
 
 At the moment there are 3 points in the execution that can be influenced by a plugin:
 
-- **deployer.task_command.configure** configuring a command
-- **deployer.runner.pre_run** Before running a command
-- **deployer.runner.post_run** After running a command
+- **automaton.task_command.configure** configuring a command
+- **automaton.task.pre_run** Before running a command
+- **automaton.task.run** While Running the task
+- **automaton.task.post_run** After running a command
 
 When these actions happen a event is dispatched, by making use of a EventSubscriber it is possible to create some impact.
 
@@ -91,9 +91,10 @@ class ServerEventSubscriber extends AbstractPluginEventSubscriber
     public static function getSubscribedEvents()
     {
         return array(
-            'deployer.task_command.configure' => 'onTaskCommandConfigure',
-            'deployer.runner.pre_run' => array('onRunnerPreRun', 99),
-            'deployer.runner.post_run' => 'onRunnerPostRun',
+            'automaton.task_command.configure' => 'configureTaskCommand',
+            'automaton.task.pre_run' => 'preRun',
+            'automaton.task.run' => array('onRun', 20),
+            'automaton.task.post_run' => 'postRun',
         );
     }
 
@@ -101,51 +102,80 @@ class ServerEventSubscriber extends AbstractPluginEventSubscriber
 }
 ~~~
 
-**onTaskCommandConfigure** can make changes to the TaskCommand. This is generally used to add input options or arguments
+**configureTaskCommand** can make changes to the TaskCommand. This is generally used to add input options or arguments
 
 ~~~
-    public function onTaskCommandConfigure(TaskCommandEvent $event)
+    public function configureTaskCommand(TaskCommandEvent $event)
     {
-        $event->getCommand()->addOption('server', 's', InputOption::VALUE_OPTIONAL, 'Force a specific server');
+        $event->getCommand()->addOption('server', 's', InputOption::VALUE_OPTIONAL, 'Force to run on a specific server');
+        $event->getCommand()->addOption('dry-run', null, InputOption::VALUE_NONE, 'Dry-Run');
     }
 ~~~
    
-**onRunnerPreRun** Will be executed before the Runner is executed. 
+**preRun** Will be executed before the task is executed. 
 
-Here we assign all servers to the runner unless the options --server is specified
+During the pre-run you prepare the RuntimeEnvironment with all parameters that generally change due to input options and arguments.
    
 ~~~
-    public function onRunnerPreRun(RunnerEvent $event)
+    public function preRun(TaskEvent $event)
     {
-        $event->getRunner()->setServers($this->plugin->all());
-        if ($event->getInput()->hasOption('server') && $serverName = $event->getInput()->getOption('server')) {
-            $event->getRunner()->setServers(array($serverName => $this->plugin->get($serverName)));
+        $environment = $event->getRuntimeEnvironment();
+        $input = $environment->getInput();
+        $servers = $this->plugin->all();
+
+        if ( $input->hasOption('dry-run') ) {
+            $output = $environment->getOutput();
+            $servers = array_map(function($value) use ($output) {
+               return new DryRunServer($value, $output);
+            },$servers);
         }
+        if ($input->hasOption('server') && $serverName = $input->getOption('server')) {
+            $servers = array($serverName => $servers[$serverName]);
+        }
+        $environment->set('servers',$servers);
     }
 ~~~
-  
-**onRunnerPostRun** Will be executed after the Runner is executed. 
 
-Here we simply restore all servers to revert the --server option
+**onRun** On Run is meant to allow you to change how tasks are processed. 
+
+For example in the ServerPlugin tasks are invoked for each server, rather than just once.
+
+*Note the `stopPropagation()` call at the end. We don't want the task to be executed again.
 
 ~~~
-    public function onRunnerPostRun(RunnerEvent $event)
+  public function onRun(TaskEvent $event)
+  {
+        $environment = $taskEvent->getRuntimeEnvironment();
+        $task = $taskEvent->getTask();
+        $servers =  $environment->get('servers', array());
+        foreach ( $servers as $server ) {
+            $environment->set('server', $server);
+            $this->eventDispatcher->dispatch('automaton.task.invoke', new TaskEvent($task, $environment));
+        }
+        $taskEvent->stopPropagation();
+  }
+~~~
+
+**postRun** Will be executed after the task is executed. 
+
+~~~
+    public function postRun(TaskEvent $event)
     {
-        $event->getRunner()->setServers($this->plugin->all());
+        ...
     }
 ~~~
 
 
 ### Loading your new Plugin
 
-add the following to your deploy configuration file under `deployer`
+add the following to your deploy configuration file under `automaton`
 
 ~~~
-deployer:
+automaton:
   my:
     _config: <some-location>/my.yml
     <instance-name>: <instance-string-param>
 ~~~
 
-when the configuration of the Deployer is loaded it will load the configuration file defined in `_config` 
+when the configuration of the automaton is loaded it will load the configuration file defined in `_config` 
 and register all instances defined under it.

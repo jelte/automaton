@@ -17,11 +17,20 @@ releases:
             title: Sharing variables between tasks ( Runtime Environment )
           -
             title: Implement Recipes
+          -
+            title: Make Before & After configurable
+      -
+        name: Console
+        todos:
+          -
+            title: Progress output, give feedback for started and finished tasks
       -
         name: SSH
         todos:
           -
             title: Test PhpSeclib Server class
+          -
+            title: Use php's ssh2 extension instead of phpseclib
           -
             title: define gateways ( SSH tunnels )
       -
@@ -31,3 +40,10 @@ releases:
             title: Add documentional
           -
             title: Fix menu layout
+  -
+    name: Future release
+    sections:
+      -
+        name: Configuration
+        todos:
+          - init/append configuration files through CLI

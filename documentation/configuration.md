@@ -4,18 +4,18 @@ title: Documentation - Configuration
 ---
 ## Configuration
 
-PHP Deployer uses Symfony's Dependency Injection Container to define its configuration.
-So configuring PHP Deployer is very simular to configuring Symfony.
+PHP automaton uses Symfony's Dependency Injection Container to define its configuration.
+So configuring PHP automaton is very simular to configuring Symfony.
 
 ~~~
 imports:
-  - { resource: src/Deployer/Resources/configs/deployer.yml }
+  - { resource: src/automaton/Resources/configs/automaton.yml }
 
 parameters:
   host: my.domain
   username: me
 
-deployer:
+automaton:
   server:
     server_1: %username%@%myhost%
     server_2:
@@ -29,9 +29,9 @@ deployer:
     stage:
       servers: [server_1]
   task:
-    debug: Deployer\Recipe\Common::debug
-    deploy: Deployer\Recipe\Common::deploy
-    deploy:update_code: Deployer\Recipe\Common::update_code
+    debug: automaton\Recipe\Common::debug
+    deploy: automaton\Recipe\Common::deploy
+    deploy:update_code: automaton\Recipe\Common::update_code
   <myPlugin>:
     _config: configs/myPlugin.<yml|xml>
 ~~~

@@ -20,6 +20,9 @@
     -
       name: Plugins
       link: documentation/plugins
+    -
+      name: Extra
+      link: documentation/extras
 
 -
   name: Roadmap

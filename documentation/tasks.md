@@ -26,9 +26,9 @@ function mytask(InputInterface $input, OutputInterface $output, ServerInterface 
 #### Configuration
 
 ~~~
-deployer:
+automaton:
   task:
-    init: Deployer\Recipe\Common::init
+    init: automaton\Recipe\Common::init
 ~~~
 
 *note: Method calls haven't been tested yet*
@@ -39,7 +39,7 @@ deployer:
 #### Configuration
 
 ~~~
-deployer:
+automaton:
   task:
     deploy_server: deploy
 ~~~
@@ -51,7 +51,7 @@ An alias is a complete copy of a task including its Before and After tasks, but 
 #### Configuration
 
 ~~~
-deployer:
-  task:
+automaton:
+  alias:
     deploy_server: deploy
 ~~~

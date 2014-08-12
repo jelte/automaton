@@ -7,6 +7,6 @@ Coming soon!
 
 ### Defining tasks
 ~~~
-deployer:
+automaton:
   recipe:
 ~~~
