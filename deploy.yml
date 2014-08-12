@@ -14,4 +14,4 @@ automaton:
       servers: [stage_1]
   task:
     _config: src/Automaton/Resources/configs/task.yml
-    debug: Automaton\Recipe\Common::debug
+    debug: Automaton\Recipe\Common::debut

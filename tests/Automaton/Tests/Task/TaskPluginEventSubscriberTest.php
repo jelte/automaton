@@ -57,10 +57,13 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $serverParam = $this->getMock('\ReflectionParameter', array(), array(), '', false);
         $serverParam->expects($this->once())->method('getName')->willReturn('server');
+        $serverParam->expects($this->once())->method('allowsNull')->willReturn(true);
         $inputParam = $this->getMock('\ReflectionParameter', array(), array(), '', false);
         $inputParam->expects($this->once())->method('getName')->willReturn('input');
+        $inputParam->expects($this->once())->method('allowsNull')->willReturn(true);
         $outputParam = $this->getMock('\ReflectionParameter', array(), array(), '', false);
         $outputParam->expects($this->once())->method('getName')->willReturn('output');
+        $outputParam->expects($this->once())->method('allowsNull')->willReturn(true);
         $method->expects($this->once())->method('getParameters')->willReturn(array(
             $serverParam, $inputParam, $outputParam
         ));

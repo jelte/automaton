@@ -60,12 +60,13 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
         $args = array();
         foreach ($callable->getParameters() as $parameter) {
             $class = $parameter->getClass()?$parameter->getClass()->getName():null;
+            $allowsNull = $parameter->allowsNull();
             $name =  $parameter->getName();
             $value = $runtimeEnvironment->get($name);
-            if ( $value === null && !$parameter->allowsNull() ) {
+            if ( $value === null && !$allowsNull ) {
                 throw new InvalidArgumentException(sprintf('Closure parameter "%s" can not be null', $name));
             }
-            if (!$parameter->allowsNull() && null !== $class && !($value instanceof $class) ) {
+            if (!$allowsNull && null !== $class && !($value instanceof $class) ) {
                 throw new InvalidArgumentException(sprintf('Closure parameter "%s" is not an instance of "%s"', $name, $class));
             }
             $args[] = $value;
