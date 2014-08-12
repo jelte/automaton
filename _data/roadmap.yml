@@ -6,19 +6,29 @@ releases:
         name: General
         todos:
           -
-            title: Basic functionality (Server, Tasks, Runner)
+            title: Basic functionality
             done: yes
           -
-            title: Stage Plugin
+            title: Task Plugin - Define and run tasks
+            done: yes
+          -
+            title: Server Plugin - Define servers
+            done: yes
+          -
+            title: Stage Plugin - Define stages
             done: yes
           -
             title: Running tasks locally
           -
             title: Sharing variables between tasks ( Runtime Environment )
+            done: yes
           -
             title: Implement Recipes
           -
             title: Make Before & After configurable
+            done: yes
+          -
+            title: Add Behavior Tests
       -
         name: Console
         todos:
@@ -46,4 +56,5 @@ releases:
       -
         name: Configuration
         todos:
-          - init/append configuration files through CLI
+          -
+            title: init/append configuration files through CLI
