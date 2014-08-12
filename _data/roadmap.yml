@@ -19,6 +19,7 @@ releases:
             done: yes
           -
             title: Running tasks locally
+            done: yes
           -
             title: Sharing variables between tasks ( Runtime Environment )
             done: yes

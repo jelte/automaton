@@ -15,13 +15,25 @@ A task can be any callable function:
 Any valid method or function can be a Task.
 
 ~~~
-function mytask(InputInterface $input, OutputInterface $output, ServerInterface $server)
+function mytask([<Class> $<environment-value>])
 {
     ... your code ...
 }
 ~~~
 
 *note: Using functions is not recommended, but it is possible. It is better to use a static method.*
+
+Through reflection parameters will be added to your function from the RuntimeEnvironment. 
+
+So to get the current server:
+
+~~~
+function mytask(ServerInterface $server)
+{
+    ... your code ...
+}
+~~~
+
 
 #### Configuration
 
