@@ -1,21 +1,14 @@
 <?php
 
 
-namespace Deployer\Console\Command\Event;
+namespace Deployer;
 
 
-use Deployer\Runner\Runner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\Event;
 
-class RunnerEvent extends Event
+class RuntimeEnvironment
 {
-    /**
-     * @var Runner
-     */
-    protected $runner;
-
     /**
      * @var InputInterface
      */
@@ -26,16 +19,25 @@ class RunnerEvent extends Event
      */
     protected $output;
 
-    public function __construct(Runner $runner, InputInterface $input, OutputInterface $output)
+    public function __construct(InputInterface $input, OutputInterface $output)
     {
-        $this->runner = $runner;
         $this->input = $input;
         $this->output = $output;
     }
 
-    public function getRunner()
+    /**
+     * @var array
+     */
+    protected $values;
+
+    public function set($name, $value)
     {
-        return $this->runner;
+        $this->values[$name] = $value;
+    }
+
+    public function get($name, $default = null)
+    {
+        return isset($this->values[$name]) ? $this->values[$name] : $default;
     }
 
     public function getInput()

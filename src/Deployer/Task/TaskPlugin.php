@@ -3,8 +3,6 @@
 
 namespace Deployer\Task;
 
-
-use Deployer\Console\Command\Event\TaskCommandExecuteEvent;
 use Deployer\Exception\InvalidArgumentException;
 use Deployer\Plugin\AbstractPlugin;
 
@@ -56,6 +54,15 @@ class TaskPlugin extends AbstractPlugin
      */
     public function before($task, $before)
     {
+        $this->get($task)->before($this->get($before));
+    }
 
+    /**
+     * @param $task
+     * @param $after
+     */
+    public function after($task, $after)
+    {
+        $this->get($task)->after($this->get($after));
     }
 } 

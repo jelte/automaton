@@ -8,9 +8,6 @@ use Deployer\Console\Command\RunTaskCommand;
 
 class RunTaskCommandTest extends \PHPUnit_Framework_TestCase
 {
-
-    protected $runner;
-
     protected $task;
 
     protected $eventDispatcher;
@@ -26,7 +23,6 @@ class RunTaskCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->runner = $this->getMock('Deployer\Runner\Runner');
         $this->task = $this->getMock('Deployer\Task\TaskInterface');
         $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $this->task->expects($this->once())->method('getName')->willReturn('debug');
@@ -34,7 +30,7 @@ class RunTaskCommandTest extends \PHPUnit_Framework_TestCase
         $this->input = $this->getMock('Symfony\Component\Console\Input\InputInterface');
         $this->output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
 
-        $this->command = new RunTaskCommand($this->runner, $this->task, $this->eventDispatcher);
+        $this->command = new RunTaskCommand($this->task, $this->eventDispatcher);
     }
 
     /**
@@ -50,12 +46,10 @@ class RunTaskCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function canBeExecuted()
     {
-        $this->runner->expects($this->once())->method('setUp');
-        $this->runner->expects($this->once())->method('run')->with($this->task);
-
-        $this->eventDispatcher->expects($this->exactly(2))->method('dispatch')->withConsecutive(
-            array($this->equalTo('deployer.runner.pre_run')),
-            array($this->equalTo('deployer.runner.post_run'))
+        $this->eventDispatcher->expects($this->exactly(3))->method('dispatch')->withConsecutive(
+            array($this->equalTo('deployer.task.pre_run')),
+            array($this->equalTo('deployer.task.run')),
+            array($this->equalTo('deployer.task.post_run'))
         );
 
         $this->command->run($this->input, $this->output);

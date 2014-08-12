@@ -6,7 +6,9 @@ namespace Deployer\Console\Command;
 
 use Deployer\Console\Command\Event\RunnerEvent;
 use Deployer\Console\Command\Event\TaskCommandEvent;
+use Deployer\Console\Command\Event\TaskEvent;
 use Deployer\Runner\Runner;
+use Deployer\RuntimeEnvironment;
 use Deployer\Task\TaskInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,11 +17,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RunTaskCommand extends Command
 {
-    /**
-     * @var Runner
-     */
-    protected $runner;
-
     /**
      * @var TaskInterface
      */
@@ -30,9 +27,8 @@ class RunTaskCommand extends Command
      */
     protected $eventDispatcher;
 
-    public function __construct(Runner $runner, TaskInterface $task, EventDispatcherInterface $eventDispatcher)
+    public function __construct(TaskInterface $task, EventDispatcherInterface $eventDispatcher)
     {
-        $this->runner = $runner;
         $this->task = $task;
         $this->eventDispatcher = $eventDispatcher;
         parent::__construct($task->getName());
@@ -45,12 +41,12 @@ class RunTaskCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->runner->setUp($input, $output);
+        $runtimeEnvironment = new RuntimeEnvironment($input, $output);
 
-        $this->eventDispatcher->dispatch('deployer.runner.pre_run', new RunnerEvent($this->runner, $input, $output));
+        $this->eventDispatcher->dispatch('deployer.task.pre_run', new TaskEvent($this->task, $runtimeEnvironment));
 
-        $this->runner->run($this->task);
+        $this->eventDispatcher->dispatch('deployer.task.run', new TaskEvent($this->task, $runtimeEnvironment));
 
-        $this->eventDispatcher->dispatch('deployer.runner.post_run', new RunnerEvent($this->runner, $input, $output));
+        $this->eventDispatcher->dispatch('deployer.task.post_run', new TaskEvent($this->task, $runtimeEnvironment));
     }
 } 

@@ -3,49 +3,48 @@
 
 namespace Deployer\Tests\Stage;
 
+use Deployer\Stage\StagePluginEventSubscriber;
+use Deployer\Task\TaskPluginEventSubscriber;
 
-use Deployer\Runner\Runner;
+class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
+{
+    protected $plugin, $task, $runtimeEnvironment, $input, $output, $taskEvent, $eventDispatcher;
 
-class RunnerTest extends \PHPUnit_Framework_TestCase {
     /**
-     * @var Runner
+     * @var TaskPluginEventSubscriber
      */
-    protected $runner;
+    protected $subscriber;
 
-    protected $input;
-
-    protected $output;
 
     public function setUp()
     {
-        $this->runner = new Runner();
+        $this->plugin = $this->getMock('Deployer\Task\TaskPlugin');
+        $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->task = $this->getMock('Deployer\Task\TaskInterface');
         $this->input = $this->getMock('Symfony\Component\Console\Input\InputInterface');
         $this->output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
-        $this->runner->setUp($this->input, $this->output);
+        $this->runtimeEnvironment = $this->getMock('Deployer\RuntimeEnvironment', array(), array($this->input, $this->output));
+        $this->taskEvent = $this->getMock('Deployer\Console\Command\Event\TaskEvent', array(), array($this->task, $this->runtimeEnvironment));
+
+        $this->subscriber = new TaskPluginEventSubscriber($this->plugin, $this->eventDispatcher);
     }
 
     /**
      * @test
      */
-    public function canHaveServers()
+    public function runnable()
     {
-        $this->runner->setServers(array(
-            'server-1' => $this->getMock('Deployer\Server\ServerInterface'),
-            'server-2' => $this->getMock('Deployer\Server\ServerInterface')
-        ));
-
-        $this->assertInternalType('array', $this->runner->getServers());
-        $this->assertCount(2, $this->runner->getServers());
+        $this->taskEvent->expects($this->once())->method('getTask')->willReturn($this->createSimpleTask());
+        $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
+        $this->subscriber->onRun($this->taskEvent);
     }
 
     /**
      * @test
      */
-    public function doesRunTaskWithServers()
+    public function hasSubscribedEvents()
     {
-        $this->runner->setServers(array('server-1' => $this->getMock('Deployer\Server\ServerInterface')));
-
-        $this->runner->run($this->createSimpleTask());
+        $this->assertInternalType('array', $this->subscriber->getSubscribedEvents());
     }
 
     /**
@@ -53,8 +52,6 @@ class RunnerTest extends \PHPUnit_Framework_TestCase {
      */
     public function invokesMethodsWithParams()
     {
-        $this->runner->setServers(array('server-1' => $this->getMock('Deployer\Server\ServerInterface')));
-
         $task = $this->getMock('Deployer\Task\ExecutableTaskInterface');
         $method = $this->getMock('\ReflectionMethod', array(), array(), '', false);
 
@@ -72,83 +69,60 @@ class RunnerTest extends \PHPUnit_Framework_TestCase {
         $task->expects($this->once())->method('getBefore')->willReturn(array());
         $task->expects($this->once())->method('getAfter')->willReturn(array());
 
-        $this->runner->run($task);
+        $this->taskEvent->expects($this->once())->method('getTask')->willReturn($task);
+        $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
+        $this->subscriber->onInvoke($this->taskEvent);
     }
 
     /**
      * @test
      */
-    public function runsTasksBeforeWithServers()
+    public function runsTasksBefore()
     {
-        $this->runner->setServers(array('server-1' => $this->getMock('Deployer\Server\ServerInterface')));
-
-        $this->runner->run($this->createSimpleTask(array($this->createSimpleTask())));
+        $this->taskEvent->expects($this->once())->method('getTask')->willReturn($this->createSimpleTask(array($this->createSimpleTask())));
+        $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
+        $this->subscriber->onInvoke($this->taskEvent);
     }
 
     /**
      * @test
      */
-    public function runsTasksAfterWithServers()
+    public function runsTasksAfter()
     {
-        $this->runner->setServers(array('server-1' => $this->getMock('Deployer\Server\ServerInterface')));
-
-        $this->runner->run($this->createSimpleTask(array(), array($this->createSimpleTask())));
+        $this->taskEvent->expects($this->once())->method('getTask')->willReturn($this->createSimpleTask(array(),array($this->createSimpleTask())));
+        $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
+        $this->subscriber->onInvoke($this->taskEvent);
     }
 
 
     /**
      * @test
      */
-    public function doesRunGroupTaskWithServers()
+    public function doesRunGroupTask()
     {
-        $this->runner->setServers(array('server-1' => $this->getMock('Deployer\Server\ServerInterface')));
-
-
         $groupTask = $this->getMock('Deployer\Task\GroupTaskInterface', array(), array());
         $groupTask->expects($this->once())->method('getTasks')->willReturn(array($this->createSimpleTask(), $this->createSimpleTask()));
         $groupTask->expects($this->once())->method('getBefore')->willReturn(array($this->createSimpleTask()));
         $groupTask->expects($this->once())->method('getAfter')->willReturn(array($this->createSimpleTask()));
 
-        $this->runner->run($groupTask);
+        $this->taskEvent->expects($this->once())->method('getTask')->willReturn($groupTask);
+        $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
+        $this->subscriber->onInvoke($this->taskEvent);
     }
 
     /**
      * @test
      */
-    public function doesRunAliasWithServers()
+    public function doesRunAlias()
     {
-        $this->runner->setServers(array('server-1' => $this->getMock('Deployer\Server\ServerInterface')));
-
         $alias = $this->getMock('Deployer\Task\AliasInterface', array(), array());
         $alias->expects($this->once())->method('getOriginal')->willReturn($this->createSimpleTask());
         $alias->expects($this->once())->method('getBefore')->willReturn(array($this->createSimpleTask()));
         $alias->expects($this->once())->method('getAfter')->willReturn(array($this->createSimpleTask()));
 
-        $this->runner->run($alias);
-    }
-
-    /**
-     * @test
-     */
-    public function doesNotRunTaskWithoutServers()
-    {
-        $this->runner->run($this->createSimpleTask(array(), array(), false));
-    }
-
-    /**
-     * @test
-     */
-    public function runsTasksBeforeWithoutServers()
-    {
-        $this->runner->run($this->createSimpleTask(array($this->createSimpleTask(array(), array(), false)), array(), false));
-    }
-
-    /**
-     * @test
-     */
-    public function runsTasksAfterWithoutServers()
-    {
-        $this->runner->run($this->createSimpleTask(array(), array($this->createSimpleTask(array(), array(), false)), false));
+        $this->taskEvent->expects($this->once())->method('getTask')->willReturn($alias);
+        $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
+        $this->subscriber->onInvoke($this->taskEvent);
     }
 
     private function createSimpleTask(array $before = array(), array $after = array(), $executes = true)

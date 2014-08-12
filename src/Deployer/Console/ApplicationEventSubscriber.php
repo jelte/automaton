@@ -20,10 +20,9 @@ class ApplicationEventSubscriber implements EventSubscriberInterface
 
     public function onLoad(ApplicationEvent $event)
     {
-        $runner = $event->getApplication()->getContainer()->get('deployer')->get('runner');
         $eventDispatcher = $event->getApplication()->getContainer()->get('event_dispatcher');
         foreach ($event->getApplication()->getContainer()->get('deployer')->all('task') as $taskName => $task) {
-            $event->getApplication()->add(new RunTaskCommand($runner, $task, $eventDispatcher));
+            $event->getApplication()->add(new RunTaskCommand($task, $eventDispatcher));
         }
     }
 }

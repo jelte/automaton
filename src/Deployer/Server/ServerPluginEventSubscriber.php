@@ -3,17 +3,23 @@
 
 namespace Deployer\Server;
 
-
-use Deployer\Console\Command\Event\RunnerEvent;
 use Deployer\Console\Command\Event\TaskCommandEvent;
+use Deployer\Console\Command\Event\TaskEvent;
 use Deployer\Plugin\AbstractPluginEventSubscriber;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ServerPluginEventSubscriber extends AbstractPluginEventSubscriber
 {
-    public function __construct(ServerPlugin $plugin)
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct(ServerPlugin $plugin, EventDispatcherInterface $eventDispatcherInterface)
     {
         parent::__construct($plugin);
+        $this->eventDispatcher = $eventDispatcherInterface;
     }
 
     /**
@@ -23,38 +29,53 @@ class ServerPluginEventSubscriber extends AbstractPluginEventSubscriber
     {
         return array(
             'deployer.task_command.configure' => 'onTaskCommandConfigure',
-            'deployer.runner.pre_run' => array('onRunnerPreRun', 99),
-            'deployer.runner.post_run' => 'onRunnerPostRun',
+            'deployer.task.pre_run' => array('preTaskRun', 99),
+            'deployer.task.run' => array('onRun',10)
         );
     }
 
     /**
-     * @internal
      * @param TaskCommandEvent $event
      */
-    public function onTaskCommandConfigure(TaskCommandEvent $event)
+    public function configureTaskCommand(TaskCommandEvent $event)
     {
         $event->getCommand()->addOption('server', 's', InputOption::VALUE_OPTIONAL, 'Force to run on a specific server');
+        $event->getCommand()->addOption('dry-run', null, InputOption::VALUE_NONE, 'Dry-Run');
     }
 
     /**
-     * @internal
-     * @param RunnerEvent $event
+     * @param TaskEvent $event
      */
-    public function onRunnerPreRun(RunnerEvent $event)
+    public function preTaskRun(TaskEvent $event)
     {
-        $event->getRunner()->setServers($this->plugin->all());
-        if ($event->getInput()->hasOption('server') && $serverName = $event->getInput()->getOption('server')) {
-            $event->getRunner()->setServers(array($serverName => $this->plugin->get($serverName)));
+        $environment = $event->getRuntimeEnvironment();
+        $input = $environment->getInput();
+        $servers = $this->plugin->all();
+
+        if ( $input->hasOption('dry-run') ) {
+            $output = $environment->getOutput();
+            $servers = array_map(function($value) use ($output) {
+               return new DryRunServer($value, $output);
+            },$servers);
         }
+        if ($input->hasOption('server') && $serverName = $input->getOption('server')) {
+            $servers = array($serverName => $servers[$serverName]);
+        }
+        $environment->set('servers',$servers);
     }
 
     /**
-     * @internal
-     * @param RunnerEvent $event
+     * @param TaskEvent $taskEvent
      */
-    public function onRunnerPostRun(RunnerEvent $event)
+    public function onRun(TaskEvent $taskEvent)
     {
-        $event->getRunner()->setServers($this->plugin->all());
+        $environment = $taskEvent->getRuntimeEnvironment();
+        $task = $taskEvent->getTask();
+        $servers =  $environment->get('servers', array());
+        foreach ( $servers as $server ) {
+            $environment->set('server', $server);
+            $this->eventDispatcher->dispatch('deployer.task.invoke', new TaskEvent($task, $environment));
+        }
+        $taskEvent->stopPropagation();
     }
 }

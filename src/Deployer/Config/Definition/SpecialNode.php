@@ -5,7 +5,6 @@ namespace Deployer\Config\Definition;
 
 
 use Symfony\Component\Config\Definition\BaseNode;
-use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 use Symfony\Component\Config\Definition\PrototypeNodeInterface;
 
 class SpecialNode extends BaseNode implements PrototypeNodeInterface
@@ -15,8 +14,6 @@ class SpecialNode extends BaseNode implements PrototypeNodeInterface
      * Validates the type of a Node.
      *
      * @param mixed $value The value to validate
-     *
-     * @throws InvalidTypeException when the value is invalid
      */
     protected function validateType($value)
     {
@@ -47,12 +44,14 @@ class SpecialNode extends BaseNode implements PrototypeNodeInterface
      */
     protected function mergeValues($leftSide, $rightSide)
     {
-        $result = array_merge($leftSide, $rightSide);
-
-        if ( !is_array($result) ) {
-            return $result;
+        if ( !is_array($leftSide) ) {
+            return $rightSide;
         }
-        if (array_keys($result) === range(0, count($result) - 1)) {
+        if ( !is_array($rightSide) ) {
+            return $leftSide;
+        }
+        $result = array_merge($leftSide, $rightSide);
+        if (array_keys($result) == range(0, count($result) - 1)) {
             return array_unique($result);
         }
         return $result;
@@ -74,6 +73,8 @@ class SpecialNode extends BaseNode implements PrototypeNodeInterface
      * Returns true when the node has a default value.
      *
      * @return bool    If the node has a default value
+     *
+     * @codeCoverageIgnore
      */
     public function hasDefaultValue()
     {
@@ -85,6 +86,8 @@ class SpecialNode extends BaseNode implements PrototypeNodeInterface
      *
      * @return mixed The default value
      * @throws \RuntimeException if the node has no default value
+     *
+     * @codeCoverageIgnore
      */
     public function getDefaultValue()
     {

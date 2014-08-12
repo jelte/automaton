@@ -4,6 +4,7 @@
 namespace Deployer\Tests\Task;
 
 
+use Deployer\Task\Task;
 use Deployer\Task\TaskPlugin;
 
 class TaskPluginTest extends \PHPUnit_Framework_TestCase
@@ -61,5 +62,27 @@ class TaskPluginTest extends \PHPUnit_Framework_TestCase
     {
         $this->plugin->task('test', function() {});
         $this->assertInstanceOf('Deployer\Task\Alias', $this->plugin->alias('deploy:test', 'test'));
+    }
+
+    /**
+     * @test
+     */
+    public function canAddATaskBeforeAnother()
+    {
+        $test = $this->plugin->task('test', function() {});
+        $this->plugin->task('test:init', function() {});
+        $this->plugin->before('test', 'test:init');
+        $this->assertCount(1, $test->getBefore());
+    }
+
+    /**
+     * @test
+     */
+    public function canAddATaskAfterAnother()
+    {
+        $test = $this->plugin->task('test', function() {});
+        $this->plugin->task('test:init', function() {});
+        $this->plugin->after('test', 'test:init');
+        $this->assertCount(1, $test->getAfter());
     }
 }
