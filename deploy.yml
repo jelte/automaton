@@ -1,7 +1,7 @@
 imports:
-  - { resource: src/Automoton/Resources/configs/automoton.yml }
+  - { resource: src/Automaton/Resources/configs/automaton.yml }
 
-automoton:
+automaton:
   server:
     develop:
       host: www.khepri.be
@@ -13,5 +13,5 @@ automoton:
     stage:
       servers: [stage_1]
   task:
-    _config: src/Automoton/Resources/configs/task.yml
-    debug: Automoton\Recipe\Common::debug
+    _config: src/Automaton/Resources/configs/task.yml
+    debug: Automaton\Recipe\Common::debug

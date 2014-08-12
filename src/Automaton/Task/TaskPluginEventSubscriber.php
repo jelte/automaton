@@ -5,21 +5,16 @@ namespace Automaton\Task;
 
 
 use Automaton\Console\Command\Event\TaskEvent;
+use Automaton\Exception\InvalidArgumentException;
 use Automaton\Plugin\AbstractPluginEventSubscriber;
 use Automaton\RuntimeEnvironment;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
 {
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $eventDispatcher;
-
-    public function __construct(TaskPlugin $plugin, EventDispatcherInterface $eventDispatcher)
+    public function __construct(TaskPlugin $plugin)
     {
         parent::__construct($plugin);
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -64,7 +59,16 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
     {
         $args = array();
         foreach ($callable->getParameters() as $parameter) {
-            $args[] = $runtimeEnvironment->get($parameter->getName());
+            $class = $parameter->getClass()?$parameter->getClass()->getName():null;
+            $name =  $parameter->getName();
+            $value = $runtimeEnvironment->get($name);
+            if ( $value === null && !$parameter->allowsNull() ) {
+                throw new InvalidArgumentException(sprintf('Closure parameter "%s" can not be null', $name));
+            }
+            if (!$parameter->allowsNull() && null !== $class && !($value instanceof $class) ) {
+                throw new InvalidArgumentException(sprintf('Closure parameter "%s" is not an instance of "%s"', $name, $class));
+            }
+            $args[] = $value;
         }
         $callable->invokeArgs(null, $args);
     }

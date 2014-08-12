@@ -33,7 +33,7 @@ class StagePluginEventSubscriber extends AbstractPluginEventSubscriber
      */
     public function configureTaskCommand(TaskCommandEvent $event)
     {
-        $event->getCommand()->addArgument('stage', InputArgument::OPTIONAL, 'Run commands on a specific set of servers', $this->plugin->getDefaultInstance());
+        $event->getCommand()->addArgument('stage', InputArgument::REQUIRED, 'Run commands on a specific set of servers', $this->plugin->getDefaultInstance());
     }
 
     /**

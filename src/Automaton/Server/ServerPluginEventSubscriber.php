@@ -28,7 +28,7 @@ class ServerPluginEventSubscriber extends AbstractPluginEventSubscriber
     public static function getSubscribedEvents()
     {
         return array(
-            'automaton.task_command.configure' => 'onTaskCommandConfigure',
+            'automaton.task_command.configure' => 'configureTaskCommand',
             'automaton.task.pre_run' => array('preTaskRun', 99),
             'automaton.task.run' => array('onRun',10)
         );

@@ -5,8 +5,8 @@ services:
       - {ssh: Automaton\Server\SshServer}
   automaton.event_subscriber.server:
     class: Automaton\Server\ServerPluginEventSubscriber
-    arguments: [@automaton.plugin.server]
+    arguments: [@automaton.plugin.server, @event_dispatcher]
     tags:
       - { name: kernel.event_subscriber, event: automaton.task_command.configure }
-      - { name: kernel.event_subscriber, event: automaton.runner.pre_run }
-      - { name: kernel.event_subscriber, event: automaton.runner.post_run }
+      - { name: kernel.event_subscriber, event: automaton.task.pre_run }
+      - { name: kernel.event_subscriber, event: automaton.task.on_run }

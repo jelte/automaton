@@ -2,5 +2,5 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$application = new \Automoton\Console\Application();
+$application = new \Automaton\Console\Application();
 $application->run();

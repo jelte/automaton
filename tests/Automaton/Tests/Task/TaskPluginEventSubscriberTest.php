@@ -8,7 +8,7 @@ use Automaton\Task\TaskPluginEventSubscriber;
 
 class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
 {
-    protected $plugin, $task, $runtimeEnvironment, $input, $output, $taskEvent, $eventDispatcher;
+    protected $plugin, $task, $runtimeEnvironment, $input, $output, $taskEvent;
 
     /**
      * @var TaskPluginEventSubscriber
@@ -19,14 +19,13 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->plugin = $this->getMock('Automaton\Task\TaskPlugin');
-        $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $this->task = $this->getMock('Automaton\Task\TaskInterface');
         $this->input = $this->getMock('Symfony\Component\Console\Input\InputInterface');
         $this->output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
         $this->runtimeEnvironment = $this->getMock('Automaton\RuntimeEnvironment', array(), array($this->input, $this->output));
         $this->taskEvent = $this->getMock('Automaton\Console\Command\Event\TaskEvent', array(), array($this->task, $this->runtimeEnvironment));
 
-        $this->subscriber = new TaskPluginEventSubscriber($this->plugin, $this->eventDispatcher);
+        $this->subscriber = new TaskPluginEventSubscriber($this->plugin);
     }
 
     /**

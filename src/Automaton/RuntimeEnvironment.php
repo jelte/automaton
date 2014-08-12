@@ -21,8 +21,8 @@ class RuntimeEnvironment
 
     public function __construct(InputInterface $input, OutputInterface $output)
     {
-        $this->input = $input;
-        $this->output = $output;
+        $this->set('input', $input);
+        $this->set('output', $output);
     }
 
     /**
@@ -42,11 +42,11 @@ class RuntimeEnvironment
 
     public function getInput()
     {
-        return $this->input;
+        return $this->get('input', null);
     }
 
     public function getOutput()
     {
-        return $this->output;
+        return $this->get('output', null);
     }
 }

@@ -1,3 +1,10 @@
 services:
   automaton.plugin.task:
     class: Automaton\Task\TaskPlugin
+  automaton.event_subscriber.task:
+    class: Automaton\Task\TaskPluginEventSubscriber
+    arguments: [@automaton.plugin.task]
+    tags:
+      - { name: kernel.event_subscriber, event: automaton.task_command.configure }
+      - { name: kernel.event_subscriber, event: automaton.task.on_run }
+      - { name: kernel.event_subscriber, event: automaton.task.invoke }
