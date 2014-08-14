@@ -36,14 +36,16 @@ releases:
           -
             title: Progress output, give feedback for started and finished tasks
       -
-        name: SSH
+        name: Connections
         todos:
           -
             title: Test PhpSeclib Server class
           -
             title: Use php's ssh2 extension instead of phpseclib
+            done: yes
           -
             title: define gateways ( SSH tunnels )
+            done: yes
       -
         name: Documentation
         todos:
@@ -59,3 +61,8 @@ releases:
         todos:
           -
             title: init/append configuration files through CLI
+      -
+        name: Connections
+        todos:
+          -
+            title: VPN connections
