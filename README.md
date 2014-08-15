@@ -1,7 +1,7 @@
 PHP Automoton
 ============
 [![Build Status](https://travis-ci.org/jelte/automaton.svg?branch=master)](https://travis-ci.org/jelte/automaton)
-[![Coverage Status](https://coveralls.io/repos/jelte/automaton/badge.png)](https://coveralls.io/r/jelte/automaton)
+[![Coverage Status](https://coveralls.io/repos/jelte/automaton/badge.png?branch=master)](https://coveralls.io/r/jelte/automaton?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/f11914ba-ea28-460f-a3cc-eb120afc579d/mini.png)](https://insight.sensiolabs.com/projects/f11914ba-ea28-460f-a3cc-eb120afc579d)
 
 Introduction
