@@ -13,11 +13,11 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-class ConfigurationLoader {
+class ConfigurationLoader
+{
 
 
     protected $cwd;
@@ -28,8 +28,8 @@ class ConfigurationLoader {
 
     public function __construct(ContainerBuilder $container = null, $cwd = null)
     {
-        $this->cwd = null == $cwd?getcwd():$cwd;
-        $this->container = null === $container?new ContainerBuilder():$container;
+        $this->cwd = null == $cwd ? getcwd() : $cwd;
+        $this->container = null === $container ? new ContainerBuilder() : $container;
     }
 
     protected function registerExtensions()

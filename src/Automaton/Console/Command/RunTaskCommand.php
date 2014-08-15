@@ -4,10 +4,8 @@
 namespace Automaton\Console\Command;
 
 
-use Automaton\Console\Command\Event\RunnerEvent;
 use Automaton\Console\Command\Event\TaskCommandEvent;
 use Automaton\Console\Command\Event\TaskEvent;
-use Automaton\Runner\Runner;
 use Automaton\RuntimeEnvironment;
 use Automaton\Task\TaskInterface;
 use Symfony\Component\Console\Command\Command;

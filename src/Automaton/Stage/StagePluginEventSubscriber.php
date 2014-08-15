@@ -3,8 +3,6 @@
 
 namespace Automaton\Stage;
 
-
-use Automaton\Console\Command\Event\RunnerEvent;
 use Automaton\Console\Command\Event\TaskCommandEvent;
 use Automaton\Console\Command\Event\TaskEvent;
 use Automaton\Plugin\AbstractPluginEventSubscriber;
@@ -43,15 +41,15 @@ class StagePluginEventSubscriber extends AbstractPluginEventSubscriber
     {
         $environment = $event->getRuntimeEnvironment();
         $input = $environment->getInput();
-        if ( $input->hasArgument('stage') && $stageName = $input->getArgument('stage')) {
+        if ($input->hasArgument('stage') && $stageName = $input->getArgument('stage')) {
             /** @var Stage $stage */
             $stage = $this->plugin->get($stageName);
 
             $stageServers = $stage->getServers();
             $servers = [];
 
-            foreach ( $environment->get('servers', array()) as $serverName => $server ) {
-                if ( in_array($serverName, $stageServers) ) {
+            foreach ($environment->get('servers', array()) as $serverName => $server) {
+                if (in_array($serverName, $stageServers)) {
                     $servers[$serverName] = $server;
                 }
             }

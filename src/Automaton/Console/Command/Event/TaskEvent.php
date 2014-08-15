@@ -4,11 +4,8 @@
 namespace Automaton\Console\Command\Event;
 
 
-use Automaton\Runner\Runner;
 use Automaton\RuntimeEnvironment;
 use Automaton\Task\TaskInterface;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 class TaskEvent extends Event

@@ -8,7 +8,6 @@ use Automaton\Console\Command\Event\TaskEvent;
 use Automaton\Exception\InvalidArgumentException;
 use Automaton\Plugin\AbstractPluginEventSubscriber;
 use Automaton\RuntimeEnvironment;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
 {
@@ -43,10 +42,10 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
             $this->doInvoke($task->getCallable(), $runtimeEnvironment);
         } else if ($task instanceof GroupTaskInterface) {
             foreach ($task->getTasks() as $subTask) {
-                $this->onInvoke(new TaskEvent($subTask,$runtimeEnvironment));
+                $this->onInvoke(new TaskEvent($subTask, $runtimeEnvironment));
             }
         } elseif ($task instanceof AliasInterface) {
-            $this->onInvoke(new TaskEvent($task->getOriginal(),$runtimeEnvironment));
+            $this->onInvoke(new TaskEvent($task->getOriginal(), $runtimeEnvironment));
         }
         $this->after($task, $runtimeEnvironment);
     }
@@ -59,14 +58,14 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
     {
         $args = array();
         foreach ($callable->getParameters() as $parameter) {
-            $class = $parameter->getClass()?$parameter->getClass()->getName():null;
+            $class = $parameter->getClass() ? $parameter->getClass()->getName() : null;
             $allowsNull = $parameter->allowsNull();
-            $name =  $parameter->getName();
+            $name = $parameter->getName();
             $value = $runtimeEnvironment->get($name);
-            if ( $value === null && !$allowsNull ) {
+            if ($value === null && !$allowsNull) {
                 throw new InvalidArgumentException(sprintf('Closure parameter "%s" can not be null', $name));
             }
-            if (!$allowsNull && null !== $class && !($value instanceof $class) ) {
+            if (!$allowsNull && null !== $class && !($value instanceof $class)) {
                 throw new InvalidArgumentException(sprintf('Closure parameter "%s" is not an instance of "%s"', $name, $class));
             }
             $args[] = $value;

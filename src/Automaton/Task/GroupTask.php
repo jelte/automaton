@@ -4,9 +4,6 @@
 namespace Automaton\Task;
 
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
 class GroupTask extends AbstractTask implements GroupTaskInterface
 {
     protected $tasks;
