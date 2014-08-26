@@ -24,7 +24,8 @@ releases:
             title: Sharing variables between tasks ( Runtime Environment )
             done: yes
           -
-            title: Implement Recipes
+            title: Recipes Plugin - Define recipes
+            done: yes
           -
             title: Make Before & After configurable
             done: yes
@@ -38,11 +39,6 @@ releases:
       -
         name: Connections
         todos:
-          -
-            title: Test PhpSeclib Server class
-          -
-            title: Use php's ssh2 extension instead of phpseclib
-            done: yes
           -
             title: define gateways ( SSH tunnels )
             done: yes
