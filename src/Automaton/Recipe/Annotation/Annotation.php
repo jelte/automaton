@@ -4,6 +4,6 @@
 namespace Automaton\Recipe\Annotation;
 
 
-interface Annotation {
+class Annotation {
 
-} 
+}

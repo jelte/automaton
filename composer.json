@@ -30,7 +30,7 @@
         "symfony/event-dispatcher": "~2.5",
         "symfony/finder": "~2.5",
         "symfony/console": "~2.5",
-        "jelte/automaton-ssh": "master@dev",
+        "jelte/automaton-ssh": "~0.1",
         "symfony/process": "~2.5",
         "symfony/stopwatch": "~2.5"
     },

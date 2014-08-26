@@ -9,7 +9,7 @@ namespace Automaton\Recipe\Annotation;
  * Class Before
  * @package Automaton\Recipe\Annotation
  */
-final class After implements Annotation
+final class After
 {
     public $task;
 
