@@ -14,7 +14,7 @@ class Environment
     /**
      * @param ServerInterface $server
      *
-     * @Automaton\Before("deploy")
+     * Automaton\Before("deploy")
      */
     public function init(ServerInterface $server)
     {
@@ -38,7 +38,7 @@ class Environment
      * @param ServerInterface $server
      * @param StageInterface $stage
      *
-     * @Automaton\After("environment:createSymlink")
+     * Automaton\After("environment:createSymlink")
      */
     public function cleanup(ServerInterface $server, StageInterface $stage)
     {

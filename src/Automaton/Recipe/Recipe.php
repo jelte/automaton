@@ -12,10 +12,9 @@ class Recipe
     {
         $this->classname = $classname;
     }
-
+    /*
     public function load()
     {
-        $reflection = new \ReflectionClass($this->classname);
-
-    }
+        //$reflection = new \ReflectionClass($this->classname);
+    }*/
 }

@@ -4,7 +4,6 @@
 namespace Automaton\Resources\Recipes;
 
 
-use Automaton\RuntimeEnvironment;
 use Automaton\Server\ServerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -18,7 +17,7 @@ class Composer
      * @param ServerInterface $server
      * @param OutputInterface $output
      *
-     * @Automaton\Before("composer:install")
+     * Automaton\Before("composer:install")
      */
     public function download(ServerInterface $server, OutputInterface $output)
     {

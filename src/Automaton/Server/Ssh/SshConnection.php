@@ -22,12 +22,12 @@ class SshConnection implements ConnectionInterface
 
     public function upload($local, $remote)
     {
-        // TODO: Implement upload() method.
+        throw new \DomainException('Not yet supported');
     }
 
     public function download($remote, $local)
     {
-        // TODO: Implement download() method.
+        throw new \DomainException('Not yet supported');
     }
 
     public function mkdir($path)

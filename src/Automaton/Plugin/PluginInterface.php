@@ -4,8 +4,9 @@
 namespace Automaton\Plugin;
 
 
-interface PluginInterface {
+interface PluginInterface
+{
     public function get($name);
 
     public function all();
-} 
+}

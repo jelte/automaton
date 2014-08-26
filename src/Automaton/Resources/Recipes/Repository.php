@@ -17,7 +17,7 @@ class Repository
      * @param FilesystemInterface $filesystem
      * @param StageInterface $stage
      *
-     * @Automaton\After("deploy")
+     * Automaton\After("deploy")
      */
     public function update(RuntimeEnvironment $env, SystemInterface $system, FilesystemInterface $filesystem, StageInterface $stage)
     {

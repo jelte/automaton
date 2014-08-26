@@ -4,6 +4,7 @@
 namespace Automaton\Plugin;
 
 
-interface PluginFactoryInterface {
+interface PluginFactoryInterface
+{
 
 }

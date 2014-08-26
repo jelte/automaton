@@ -16,7 +16,7 @@ class Source
      * @param RuntimeEnvironment $env
      * @param FilesystemInterface $filesystem
      *
-     * @Automaton\After("deploy")
+     * Automaton\After("deploy")
      */
     public function prepare(RuntimeEnvironment $env, FilesystemInterface $filesystem)
     {
@@ -42,7 +42,7 @@ class Source
      * @param SystemInterface $system
      * @param OutputInterface $output
      *
-     * @Automaton\After("source:prepare")
+     * Automaton\After("source:prepare")
      */
     public function archive(RuntimeEnvironment $env, ServerInterface $server, SystemInterface $system, OutputInterface $output)
     {
@@ -61,7 +61,7 @@ class Source
      * @param RuntimeEnvironment $env
      * @param ServerInterface $server
      *
-     * @Automaton\After("source:archive")
+     * Automaton\After("source:archive")
      */
     public function upload(RuntimeEnvironment $env, ServerInterface $server)
     {
@@ -76,7 +76,7 @@ class Source
      * @param ServerInterface $server
      * @param OutputInterface $output
      *
-     * @Automaton\After("source:upload")
+     * Automaton\After("source:upload")
      */
     public function extract(RuntimeEnvironment $env, ServerInterface $server, OutputInterface $output)
     {

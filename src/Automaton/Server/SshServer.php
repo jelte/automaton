@@ -4,11 +4,6 @@
 namespace Automaton\Server;
 
 
-use Automaton\Server\Ssh\Configuration;
-use Automaton\Server\Ssh\ConnectionInterface;
-use Automaton\Server\Ssh\PhpSecLib;
-use Automaton\Utils\Uri;
-
 class SshServer extends AbstractServer
 {
     /**
