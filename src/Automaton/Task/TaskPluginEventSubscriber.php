@@ -81,14 +81,18 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
     protected function before(TaskInterface $task, RuntimeEnvironment $runtimeEnvironment)
     {
         foreach ($task->getBefore() as $before) {
-            $this->onInvoke(new TaskEvent($before, $runtimeEnvironment));
+            foreach ( $before as $task ) {
+                $this->onInvoke(new TaskEvent($task, $runtimeEnvironment));
+            }
         }
     }
 
     protected function after(TaskInterface $task, RuntimeEnvironment $runtimeEnvironment)
     {
         foreach ($task->getAfter() as $after) {
-            $this->onInvoke(new TaskEvent($after, $runtimeEnvironment));
+            foreach ( $after as $task ) {
+                $this->onInvoke(new TaskEvent($task, $runtimeEnvironment));
+            }
         }
     }
 }

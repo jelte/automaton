@@ -18,6 +18,24 @@ class Common
     }
 
     /**
+     * @Automaton\Task
+     * @Automaton\Before(task="common:deploy")
+     */
+    public function preDeploy()
+    {
+
+    }
+
+    /**
+     * @Automaton\Task
+     * @Automaton\After(task="common:postDeploy", priority=999)
+     */
+    public function postDeploy()
+    {
+
+    }
+
+    /**
      * @Automaton\Task(description="Rollback your application to a previous version")
      * @Automaton\Alias(name="rollback")
      */

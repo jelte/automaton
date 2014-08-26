@@ -18,7 +18,7 @@ class Environment
      * @param ServerInterface $server
      *
      * @Automaton\Task
-     * @Automaton\Before(task="deploy")
+     * @Automaton\Before(task="preDeploy")
      */
     public function init(ServerInterface $server)
     {
@@ -33,6 +33,7 @@ class Environment
      * @param OutputInterface $output
      *
      * @Automaton\Task
+     * @Automaton\After(task="postDeploy")
      */
     public function createSymlink(RuntimeEnvironment $env, ServerInterface $server, OutputInterface $output)
     {

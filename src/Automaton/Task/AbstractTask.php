@@ -43,23 +43,27 @@ abstract class AbstractTask implements TaskInterface
         return $this->description;
     }
 
-    public function before(TaskInterface $task)
+    public function before(TaskInterface $task, $priority = 0)
     {
-        $this->before[] = $task;
+        if ( !isset($this->before[$priority]) ) $this->before[$priority] = array();
+        $this->before[$priority][] = $task;
     }
 
     public function getBefore()
     {
+        ksort($this->before);
         return $this->before;
     }
 
-    public function after(TaskInterface $task)
+    public function after(TaskInterface $task, $priority = 0)
     {
-        $this->after[] = $task;
+        if ( !isset($this->after[$priority]) ) $this->after[$priority] = array();
+        $this->after[$priority][] = $task;
     }
 
     public function getAfter()
     {
+        ksort($this->after);
         return $this->after;
     }
 }

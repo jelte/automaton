@@ -81,7 +81,7 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function runsTasksBefore()
     {
-        $this->taskEvent->expects($this->once())->method('getTask')->willReturn($this->createSimpleTask(array($this->createSimpleTask())));
+        $this->taskEvent->expects($this->once())->method('getTask')->willReturn($this->createSimpleTask(array(array($this->createSimpleTask()))));
         $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
         $this->subscriber->onInvoke($this->taskEvent);
     }
@@ -91,7 +91,7 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function runsTasksAfter()
     {
-        $this->taskEvent->expects($this->once())->method('getTask')->willReturn($this->createSimpleTask(array(),array($this->createSimpleTask())));
+        $this->taskEvent->expects($this->once())->method('getTask')->willReturn($this->createSimpleTask(array(),array(array($this->createSimpleTask()))));
         $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
         $this->subscriber->onInvoke($this->taskEvent);
     }
@@ -104,8 +104,8 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $groupTask = $this->getMock('Automaton\Task\GroupTaskInterface', array(), array());
         $groupTask->expects($this->once())->method('getTasks')->willReturn(array($this->createSimpleTask(), $this->createSimpleTask()));
-        $groupTask->expects($this->once())->method('getBefore')->willReturn(array($this->createSimpleTask()));
-        $groupTask->expects($this->once())->method('getAfter')->willReturn(array($this->createSimpleTask()));
+        $groupTask->expects($this->once())->method('getBefore')->willReturn(array(array($this->createSimpleTask())));
+        $groupTask->expects($this->once())->method('getAfter')->willReturn(array(array($this->createSimpleTask())));
 
         $this->taskEvent->expects($this->once())->method('getTask')->willReturn($groupTask);
         $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
@@ -119,8 +119,8 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $alias = $this->getMock('Automaton\Task\AliasInterface', array(), array());
         $alias->expects($this->once())->method('getOriginal')->willReturn($this->createSimpleTask());
-        $alias->expects($this->once())->method('getBefore')->willReturn(array($this->createSimpleTask()));
-        $alias->expects($this->once())->method('getAfter')->willReturn(array($this->createSimpleTask()));
+        $alias->expects($this->once())->method('getBefore')->willReturn(array(array($this->createSimpleTask())));
+        $alias->expects($this->once())->method('getAfter')->willReturn(array(array($this->createSimpleTask())));
 
         $this->taskEvent->expects($this->once())->method('getTask')->willReturn($alias);
         $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);

@@ -12,4 +12,6 @@ namespace Automaton\Recipe\Annotation;
 final class Before implements Annotation
 {
     public $task;
+
+    public $priority = 0;
 }
