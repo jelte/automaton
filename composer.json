@@ -19,7 +19,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:jelte/automaton-ssh"
+            "url": "https://github.com/jelte/automaton.git"
         }
     ],
     "require": {
