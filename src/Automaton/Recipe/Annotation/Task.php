@@ -10,8 +10,8 @@ namespace Automaton\Recipe\Annotation;
  * Class Task
  * @package Automaton\Recipe\Annotation
  */
-class Task
+final class Task implements Annotation
 {
     public $description;
     public $public = false;
-} 
+}

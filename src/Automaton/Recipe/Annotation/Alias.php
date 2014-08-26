@@ -9,9 +9,9 @@ namespace Automaton\Recipe\Annotation;
  * Class Before
  * @package Automaton\Recipe\Annotation
  */
-final class Alias
+final class Alias implements Annotation
 {
     public $name;
 
     public $public = true;
-} 
+}

@@ -100,4 +100,4 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $task->getCallable());
         $this->assertInstanceOf('ReflectionMethod',$task->getCallable()[1]);
     }
-} 
+}
