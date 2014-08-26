@@ -57,4 +57,4 @@ class DryRunServerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($name, $this->dryRunServer->getName());
     }
 
-} 
+}

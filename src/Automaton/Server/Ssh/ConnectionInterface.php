@@ -4,8 +4,6 @@
 namespace Automaton\Server\Ssh;
 
 
-use Automaton\Utils\Uri;
-
 interface ConnectionInterface
 {
     public function run($command);

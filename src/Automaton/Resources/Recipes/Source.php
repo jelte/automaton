@@ -90,4 +90,4 @@ class Source
         }
         $server->run("cd {$target} && tar xzf {$archive} 1>archive.stdout.log 2>archive.stderr.log && rm {$archive} && cd {$finalTarget}");
     }
-} 
+}

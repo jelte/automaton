@@ -55,4 +55,4 @@ class Environment
             $server->run("rm -rf releases/{$release}");
         }
     }
-} 
+}

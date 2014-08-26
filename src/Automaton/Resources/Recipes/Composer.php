@@ -44,4 +44,4 @@ class Composer
         }
         print $server->run($command);
     }
-} 
+}
