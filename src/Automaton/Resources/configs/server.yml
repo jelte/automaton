@@ -1,8 +1,6 @@
 services:
   automaton.plugin.server:
     class: Automaton\Server\ServerPlugin
-    arguments:
-      - {ssh: Automaton\Server\SshServer}
   automaton.event_subscriber.server:
     class: Automaton\Server\ServerPluginEventSubscriber
     arguments: [@automaton.plugin.server, @event_dispatcher]

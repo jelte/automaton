@@ -47,6 +47,7 @@ class Application extends BaseApplication
 
         /** @var \Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher $eventDispatcher */
         $eventDispatcher->dispatch('automaton.load', new ApplicationEvent($this, $input, $output));
+        $eventDispatcher->dispatch('automaton.post_load', new ApplicationEvent($this, $input, $output));
 
         return parent::doRun($input, $output);
     }

@@ -51,11 +51,16 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
     }
 
     /**
-     * @param \ReflectionMethod|\ReflectionFunction $callable
+     * @param \ReflectionMethod|\ReflectionFunction|array $callable
      * @param RuntimeEnvironment $runtimeEnvironment
      */
     protected function doInvoke($callable, RuntimeEnvironment $runtimeEnvironment)
     {
+        $object = null;
+        if ( is_array($callable) ) {
+            list($object, $method) = $callable;
+            $callable = $method;
+        }
         $args = array();
         foreach ($callable->getParameters() as $parameter) {
             $class = $parameter->getClass() ? $parameter->getClass()->getName() : null;
@@ -70,7 +75,7 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
             }
             $args[] = $value;
         }
-        $callable->invokeArgs(null, $args);
+        $callable->invokeArgs($object, $args);
     }
 
     protected function before(TaskInterface $task, RuntimeEnvironment $runtimeEnvironment)

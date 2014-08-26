@@ -47,6 +47,7 @@ abstract class AbstractServer implements ServerInterface
             if ( substr($this->cwd,0,1) != DIRECTORY_SEPARATOR && substr($this->cwd,0,1) != '~' ) {
                 $this->cwd = '~/'.$this->cwd;
             }
+            $this->cwd = trim($this->cwd, DIRECTORY_SEPARATOR);
         }
         return $this->cwd.DIRECTORY_SEPARATOR.$path;
     }

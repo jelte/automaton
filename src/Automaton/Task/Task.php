@@ -27,6 +27,9 @@ class Task extends AbstractTask implements ExecutableTaskInterface
             $callable = explode("::", $callable);
         }
         list($class, $method) = $callable;
+        if ( is_object($class) ) {
+            return array($class, new \ReflectionMethod($class, $method));
+        }
         return new \ReflectionMethod($class, $method);
     }
 }

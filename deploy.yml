@@ -2,6 +2,12 @@ imports:
   - { resource: src/Automaton/Resources/configs/automaton.yml }
 
 automaton:
+  recipe:
+    common: Automaton\Resources\Recipes\Common
+    composer: Automaton\Resources\Recipes\Composer
+    source: Automaton\Resources\Recipes\Source
+    repository: Automaton\Resources\Recipes\Repository
+    environment: Automaton\Resources\Recipes\Environment
   server:
     develop:
       -

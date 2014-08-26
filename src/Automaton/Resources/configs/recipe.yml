@@ -1,0 +1,8 @@
+services:
+  automaton.plugin.recipe:
+    class: Automaton\Recipe\RecipePlugin
+  automaton.event_subscriber.recipe:
+    class: Automaton\Recipe\RecipePluginEventSubscriber
+    arguments: [@automaton.plugin.recipe, @event_dispatcher]
+    tags:
+      - { name: kernel.event_subscriber, event: automaton.post_load }
