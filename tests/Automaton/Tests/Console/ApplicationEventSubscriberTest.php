@@ -42,6 +42,7 @@ class ApplicationEventSubscriberTest extends \PHPUnit_Framework_TestCase
         $automaton = $this->getMock('Automaton\Automaton', array(), array(), '', false);
         $task = $this->getMock('Automaton\Task\TaskInterface');
         $task->expects($this->once())->method('getName')->willReturn('test');
+        $task->expects($this->once())->method('isPublic')->willReturn(true);
         $automaton->expects($this->once())->method('all')->willReturn(array('test' => $task));
         $container->expects($this->any())->method('get')->withConsecutive(
             array($this->equalTo('event_dispatcher')),

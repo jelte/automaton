@@ -10,13 +10,16 @@ use Automaton\System\FilesystemInterface;
 use Automaton\System\SystemInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Automaton\Recipe\Annotation as Automaton;
+
 class Source
 {
     /**
      * @param RuntimeEnvironment $env
      * @param FilesystemInterface $filesystem
      *
-     * Automaton\After("deploy")
+     * @Automaton\Task
+     * @Automaton\After(task="deploy")
      */
     public function prepare(RuntimeEnvironment $env, FilesystemInterface $filesystem)
     {
@@ -42,7 +45,8 @@ class Source
      * @param SystemInterface $system
      * @param OutputInterface $output
      *
-     * Automaton\After("source:prepare")
+     * @Automaton\Task
+     * @Automaton\After(task="source:prepare")
      */
     public function archive(RuntimeEnvironment $env, ServerInterface $server, SystemInterface $system, OutputInterface $output)
     {
@@ -61,7 +65,8 @@ class Source
      * @param RuntimeEnvironment $env
      * @param ServerInterface $server
      *
-     * Automaton\After("source:archive")
+     * @Automaton\Task
+     * @Automaton\After(task="source:archive")
      */
     public function upload(RuntimeEnvironment $env, ServerInterface $server)
     {
@@ -76,7 +81,8 @@ class Source
      * @param ServerInterface $server
      * @param OutputInterface $output
      *
-     * Automaton\After("source:upload")
+     * @Automaton\Task
+     * @Automaton\After(task="source:upload")
      */
     public function extract(RuntimeEnvironment $env, ServerInterface $server, OutputInterface $output)
     {

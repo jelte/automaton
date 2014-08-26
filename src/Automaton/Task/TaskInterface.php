@@ -17,4 +17,6 @@ interface TaskInterface
     public function after(TaskInterface $task);
 
     public function getAfter();
+
+    public function isPublic();
 }

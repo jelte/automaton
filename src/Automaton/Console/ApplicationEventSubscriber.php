@@ -22,7 +22,9 @@ class ApplicationEventSubscriber implements EventSubscriberInterface
     {
         $eventDispatcher = $event->getApplication()->getContainer()->get('event_dispatcher');
         foreach ($event->getApplication()->getContainer()->get('automaton')->all('task') as $taskName => $task) {
-            $event->getApplication()->add(new RunTaskCommand($task, $eventDispatcher));
+            if ($task->isPublic()) {
+                $event->getApplication()->add(new RunTaskCommand($task, $eventDispatcher));
+            }
         }
     }
 }

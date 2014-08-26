@@ -16,16 +16,8 @@ automaton:
         username: khepri
   stage:
     develop:
-      servers: [develop, develop_2]
+      servers: [develop]
       options: {branch: develop}
-    stage:
-      servers: [stage_1]
   task:
     _config: src/Automaton/Resources/configs/task.yml
     debug: Automaton\Recipe\Common::debug
-    debug:before: Automaton\Recipe\Common::debug
-    debug:after: Automaton\Recipe\Common::debug
-  before:
-    debug:before: debug
-  after:
-    debug:after: debug

@@ -97,6 +97,7 @@ class TaskTest extends \PHPUnit_Framework_TestCase
     public function createdWithMethod()
     {
         $task = new Task('deploy', '', array($this, 'createdWithMethod'));
-        $this->assertInstanceOf('ReflectionMethod',$task->getCallable());
+        $this->assertInternalType('array', $task->getCallable());
+        $this->assertInstanceOf('ReflectionMethod',$task->getCallable()[1]);
     }
 } 

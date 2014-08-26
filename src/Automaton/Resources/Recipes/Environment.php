@@ -8,13 +8,17 @@ use Automaton\RuntimeEnvironment;
 use Automaton\Server\ServerInterface;
 use Automaton\Stage\StageInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Automaton\Recipe\Annotation as Automaton;
+
+
 
 class Environment
 {
     /**
      * @param ServerInterface $server
      *
-     * Automaton\Before("deploy")
+     * @Automaton\Task
+     * @Automaton\Before(task="deploy")
      */
     public function init(ServerInterface $server)
     {
@@ -23,6 +27,13 @@ class Environment
     }
 
 
+    /**
+     * @param RuntimeEnvironment $env
+     * @param ServerInterface $server
+     * @param OutputInterface $output
+     *
+     * @Automaton\Task
+     */
     public function createSymlink(RuntimeEnvironment $env, ServerInterface $server, OutputInterface $output)
     {
         $current = $server->cwd('release');
@@ -38,7 +49,8 @@ class Environment
      * @param ServerInterface $server
      * @param StageInterface $stage
      *
-     * Automaton\After("environment:createSymlink")
+     * @Automaton\Task
+     * @Automaton\After(task="environment:createSymlink")
      */
     public function cleanup(ServerInterface $server, StageInterface $stage)
     {

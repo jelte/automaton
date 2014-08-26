@@ -8,9 +8,9 @@ class Task extends AbstractTask implements ExecutableTaskInterface
 {
     protected $callable;
 
-    public function __construct($name, $description = null, $callable)
+    public function __construct($name, $description = null, $callable, $public = true)
     {
-        parent::__construct($name, $description);
+        parent::__construct($name, $description, $public);
         $this->callable = $callable;
     }
 

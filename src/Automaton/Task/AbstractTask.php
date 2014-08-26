@@ -14,15 +14,23 @@ abstract class AbstractTask implements TaskInterface
 
     protected $after = [];
 
-    public function __construct($name, $description)
+    protected $public = false;
+
+    public function __construct($name, $description, $public)
     {
         $this->name = $name;
         $this->description = $description;
+        $this->public = $public;
     }
 
     public function getName()
     {
         return $this->name;
+    }
+
+    public function isPublic()
+    {
+        return $this->public;
     }
 
     public function desc($description)

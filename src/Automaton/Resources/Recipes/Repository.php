@@ -8,6 +8,8 @@ use Automaton\RuntimeEnvironment;
 use Automaton\Stage\StageInterface;
 use Automaton\System\FilesystemInterface;
 use Automaton\System\SystemInterface;
+use Automaton\Recipe\Annotation as Automaton;
+
 
 class Repository
 {
@@ -17,7 +19,8 @@ class Repository
      * @param FilesystemInterface $filesystem
      * @param StageInterface $stage
      *
-     * Automaton\After("deploy")
+     * @Automaton\Task
+     * @Automaton\After(task="deploy")
      */
     public function update(RuntimeEnvironment $env, SystemInterface $system, FilesystemInterface $filesystem, StageInterface $stage)
     {

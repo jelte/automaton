@@ -2,7 +2,10 @@
 <?php
 $start = microtime();
 require_once __DIR__ . '/../vendor/autoload.php';
-
+\Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
+    'Automaton\Recipe\Annotation',
+    dirname(__DIR__).'/src'
+);
 $application = new \Automaton\Console\Application('Automaton', '0.1.0');
 $application->run();
 

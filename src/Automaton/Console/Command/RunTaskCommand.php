@@ -32,6 +32,11 @@ class RunTaskCommand extends Command
         parent::__construct($task->getName());
     }
 
+    public function getDescription()
+    {
+        return $this->task->getDescription();
+    }
+
     protected function configure()
     {
         $this->eventDispatcher->dispatch('automaton.task_command.configure', new TaskCommandEvent($this));

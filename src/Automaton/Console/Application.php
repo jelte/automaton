@@ -39,7 +39,7 @@ class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        $this->container = $this->configuration->load($input->getParameterOption(array('--config', '-c'), 'deploy.yml'), $this->stopwatch, $input->hasParameterOption(array('--profile')));
+        $this->container = $this->configuration->load($input->getParameterOption(array('--config', '-c'), 'automaton.yml'), $this->stopwatch, $input->hasParameterOption(array('--profile')));
 
         $eventDispatcher = $this->container->get('event_dispatcher');
 
