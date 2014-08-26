@@ -67,4 +67,4 @@ class TaskPlugin extends AbstractPlugin
     {
         $this->get($after)->after($this->get($task));
     }
-} 
+}

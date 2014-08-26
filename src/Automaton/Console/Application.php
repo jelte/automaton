@@ -62,4 +62,4 @@ class Application extends BaseApplication
 
         return $definition;
     }
-} 
+}

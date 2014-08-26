@@ -19,7 +19,6 @@ use Symfony\Component\Stopwatch\Stopwatch;
 class ConfigurationLoader
 {
 
-
     protected $cwd;
 
     protected $container;
@@ -71,4 +70,4 @@ class ConfigurationLoader
 
         return $this->container;
     }
-} 
+}

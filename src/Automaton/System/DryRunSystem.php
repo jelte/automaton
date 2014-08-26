@@ -34,4 +34,4 @@ class DryRunSystem implements SystemInterface
     {
         $this->output->writeln($command);
     }
-} 
+}

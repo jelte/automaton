@@ -14,10 +14,10 @@ class System implements SystemInterface
 
     protected $cwd;
 
-    public function __construct(FilesystemInterface $filesystem, $cwd)
+    public function __construct(FilesystemInterface $filesystem, $cwd = null)
     {
         $this->filesystem = $filesystem;
-        $this->cwd = $cwd;
+        $this->cwd = null === $cwd?getcwd():$cwd;
     }
 
     public function getFilesystem()

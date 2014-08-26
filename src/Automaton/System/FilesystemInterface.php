@@ -4,6 +4,7 @@
 namespace Automaton\System;
 
 
-interface FilesystemInterface {
+interface FilesystemInterface
+{
 
-} 
+}

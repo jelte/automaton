@@ -4,8 +4,10 @@ imports:
 automaton:
   server:
     develop:
-      host: www.khepri.be
-      login: khepri
+      -
+        host: www.khepri.be
+        auth: publicKeyFile
+        username: khepri
   stage:
     develop:
       servers: [develop, develop_2]

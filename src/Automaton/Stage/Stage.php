@@ -33,4 +33,9 @@ class Stage implements StageInterface
     {
         return $this->options;
     }
-} 
+
+    public function get($name, $default = null)
+    {
+        return isset($this->options[$name])?$this->options[$name]:$default;
+    }
+}

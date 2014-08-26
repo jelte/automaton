@@ -19,4 +19,4 @@ class MockFilesystem implements FilesystemInterface
     {
         $this->output->writeln(sprintf('%s %s',$name,implode(' ', $arguments)));
     }
-} 
+}

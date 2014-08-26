@@ -4,6 +4,7 @@
 namespace Automaton\Task;
 
 
-interface GroupTaskInterface extends TaskInterface {
+interface GroupTaskInterface extends TaskInterface
+{
     public function getTasks();
-} 
+}

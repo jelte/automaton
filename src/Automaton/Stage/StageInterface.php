@@ -4,8 +4,11 @@
 namespace Automaton\Stage;
 
 
-interface StageInterface {
+interface StageInterface
+{
     public function getName();
 
     public function getServers();
-} 
+
+    public function get($name, $default = null);
+}

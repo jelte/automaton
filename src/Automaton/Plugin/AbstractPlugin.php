@@ -25,11 +25,11 @@ class AbstractPlugin implements PluginInterface
      */
     public function get($name)
     {
-        if ( null === $name ) {
+        if (null === $name) {
             throw new \InvalidArgumentException('Name can not be null');
         }
-        if ( !isset($this->instances[$name]) ) {
-            throw new \InvalidArgumentException('No instance found for '.$name);
+        if (!isset($this->instances[$name])) {
+            throw new \InvalidArgumentException('No instance found for ' . $name);
         }
         return $this->instances[$name];
     }

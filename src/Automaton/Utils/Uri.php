@@ -65,4 +65,4 @@ class Uri {
         }
         return $uri;
     }
-} 
+}

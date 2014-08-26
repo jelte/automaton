@@ -4,6 +4,7 @@
 namespace Automaton\Task;
 
 
-interface AliasInterface extends TaskInterface {
+interface AliasInterface extends TaskInterface
+{
     public function getOriginal();
-} 
+}

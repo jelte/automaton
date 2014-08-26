@@ -57,5 +57,4 @@ class StagePluginEventSubscriber extends AbstractPluginEventSubscriber
             $environment->set('servers', $servers);
         }
     }
-
 }

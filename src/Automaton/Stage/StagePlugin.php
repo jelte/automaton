@@ -26,4 +26,4 @@ class StagePlugin extends AbstractPlugin
     {
         return $this->defaultInstance;
     }
-} 
+}

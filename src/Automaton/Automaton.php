@@ -32,4 +32,4 @@ class Automaton
     {
         return call_user_func_array(array($this->plugins->get($name), $name), $arguments);
     }
-} 
+}

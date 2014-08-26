@@ -9,7 +9,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 abstract class AbstractPluginEventSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var PluginInterfaces
+     * @var PluginInterface
      */
     protected $plugin;
 
@@ -17,4 +17,4 @@ abstract class AbstractPluginEventSubscriber implements EventSubscriberInterface
     {
         $this->plugin = $plugin;
     }
-} 
+}

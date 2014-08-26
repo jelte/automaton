@@ -5,6 +5,7 @@ namespace Automaton\Exception;
 
 
 
-class InvalidArgumentException extends \InvalidArgumentException {
+class InvalidArgumentException extends \InvalidArgumentException
+{
 
-} 
+}

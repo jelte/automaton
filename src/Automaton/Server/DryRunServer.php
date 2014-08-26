@@ -57,4 +57,4 @@ class DryRunServer extends AbstractServer
     {
         $this->output->writeln(sprintf('[%s] upload(%s, %s)', $this->server->getName(), $local, $remote));
     }
-} 
+}

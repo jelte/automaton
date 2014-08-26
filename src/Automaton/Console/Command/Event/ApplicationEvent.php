@@ -47,4 +47,4 @@ class ApplicationEvent extends Event
     {
         return $this->output;
     }
-} 
+}

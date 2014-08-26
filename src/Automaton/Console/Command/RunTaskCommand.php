@@ -47,4 +47,4 @@ class RunTaskCommand extends Command
 
         $this->eventDispatcher->dispatch('automaton.task.post_run', new TaskEvent($this->task, $runtimeEnvironment));
     }
-} 
+}

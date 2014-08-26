@@ -26,4 +26,4 @@ class TaskCommandEvent extends Event {
     {
         return $this->command;
     }
-} 
+}

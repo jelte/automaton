@@ -13,4 +13,4 @@ class Common
     {
         $output->writeln('Debug:' . $server->getName());
     }
-} 
+}
