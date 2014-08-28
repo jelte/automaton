@@ -61,8 +61,8 @@ class ServerPluginEventSubscriber extends AbstractPluginEventSubscriber
         if ($serverName = $input->getOption('server')) {
             $servers = array($serverName => $servers[$serverName]);
         }
-        array_walk($servers, function($value) use ( $environment ){
-            $value->setOutput($environment->getOutput());
+        array_walk($servers, function(ServerInterface $server) use ( $environment ){
+            $server->setOutput($environment->getOutput());
         });
         $environment->set('servers',$servers);
     }

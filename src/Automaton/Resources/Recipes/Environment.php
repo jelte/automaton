@@ -7,10 +7,7 @@ namespace Automaton\Resources\Recipes;
 use Automaton\RuntimeEnvironment;
 use Automaton\Server\ServerInterface;
 use Automaton\Stage\StageInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Automaton\Recipe\Annotation as Automaton;
-
-
 
 class Environment
 {

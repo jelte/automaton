@@ -8,7 +8,6 @@ use Automaton\RuntimeEnvironment;
 use Automaton\Server\ServerInterface;
 use Automaton\System\FilesystemInterface;
 use Automaton\System\SystemInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 use Automaton\Recipe\Annotation as Automaton;
 

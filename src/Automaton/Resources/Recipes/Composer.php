@@ -5,7 +5,6 @@ namespace Automaton\Resources\Recipes;
 
 
 use Automaton\Server\ServerInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Automaton\Recipe\Annotation as Automaton;
 
 /**
