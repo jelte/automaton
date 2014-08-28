@@ -43,7 +43,7 @@ class Composer
      */
     public function copyPreviousVendors(ServerInterface $server)
     {
-        $server->run("cp -R ../../release/vendor .");
+        $server->run("cp -R {$server->cwd('release/vendor')} .");
     }
 
     /**
