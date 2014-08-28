@@ -16,24 +16,22 @@ class Composer
 {
     /**
      * @param ServerInterface $server
-     * @param OutputInterface $output
      *
      * @Automaton\Task
      * @Automaton\Before(task="composer:install")
      */
-    public function download(ServerInterface $server, OutputInterface $output)
+    public function download(ServerInterface $server)
     {
         $server->run("curl -s http://getcomposer.org/installer | php");
     }
 
     /**
      * @param ServerInterface $server
-     * @param OutputInterface $output
      *
      * @Automaton\Task
      * @Automaton\After(task="deploy", priority=20)
      */
-    public function install(ServerInterface $server, OutputInterface $output)
+    public function install(ServerInterface $server)
     {
          print $server->run("php composer.phar install --no-dev --verbose --prefer-dist --optimize-autoloader --no-progress > composer.log");
     }

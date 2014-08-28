@@ -41,14 +41,12 @@ class Source
 
     /**
      * @param RuntimeEnvironment $env
-     * @param ServerInterface $server
      * @param SystemInterface $system
-     * @param OutputInterface $output
      *
      * @Automaton\Task
      * @Automaton\After(task="source:prepare")
      */
-    public function archive(RuntimeEnvironment $env, ServerInterface $server, SystemInterface $system, OutputInterface $output)
+    public function archive(RuntimeEnvironment $env, SystemInterface $system)
     {
         $release = $env->get('release');
         $path = realpath($env->get('repository.local_path') . DIRECTORY_SEPARATOR . '..');
@@ -75,12 +73,11 @@ class Source
     /**
      * @param RuntimeEnvironment $env
      * @param ServerInterface $server
-     * @param OutputInterface $output
      *
      * @Automaton\Task
      * @Automaton\After(task="source:upload")
      */
-    public function extract(RuntimeEnvironment $env, ServerInterface $server, OutputInterface $output)
+    public function extract(RuntimeEnvironment $env, ServerInterface $server)
     {
         $archive = "/tmp/{$env->get('release.archive')}";
         $target = $server->cwd('releases');

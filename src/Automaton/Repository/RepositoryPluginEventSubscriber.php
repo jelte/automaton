@@ -3,13 +3,9 @@
 
 namespace Automaton\Repository;
 
-
-use Automaton\Console\Command\Event\RunnerEvent;
 use Automaton\Console\Command\Event\TaskCommandEvent;
 use Automaton\Console\Command\Event\TaskEvent;
 use Automaton\Plugin\AbstractPluginEventSubscriber;
-use Automaton\Repository\RepositoryPlugin;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 class RepositoryPluginEventSubscriber extends AbstractPluginEventSubscriber

@@ -30,12 +30,11 @@ class Environment
     /**
      * @param RuntimeEnvironment $env
      * @param ServerInterface $server
-     * @param OutputInterface $output
      *
      * @Automaton\Task
      * @Automaton\After(task="deploy", priority=999)
      */
-    public function createSymlink(RuntimeEnvironment $env, ServerInterface $server, OutputInterface $output)
+    public function createSymlink(RuntimeEnvironment $env, ServerInterface $server)
     {
         $current = $server->cwd('release');
         $release = $server->cwd("releases/{$env->get('release')}");
