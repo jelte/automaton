@@ -22,3 +22,7 @@ services:
     tags:
       - { name: kernel.event_subscriber, event: automaton.task_command.configure }
       - { name: kernel.event_subscriber, event: automaton.task.pre_run }
+
+automaton:
+  task:
+    _config: src/Automaton/Resources/configs/task.yml

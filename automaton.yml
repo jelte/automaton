@@ -19,9 +19,6 @@ automaton:
     develop:
       servers: [develop]
       options: {branch: master}
-  task:
-    _config: src/Automaton/Resources/configs/task.yml
-    debug: Automaton\Recipe\Common::debug
   repository: git@github.com:jelte/markant-zwijnaarde.git
   branch: master
   excludes:
