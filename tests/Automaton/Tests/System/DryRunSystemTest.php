@@ -6,6 +6,7 @@ namespace Automaton\Tests\System;
 
 use Automaton\System\DryRunSystem;
 use Automaton\System\System;
+use Symfony\Component\Console\Output\OutputInterface;
 
 
 class DryRunSystemTest extends \PHPUnit_Framework_TestCase

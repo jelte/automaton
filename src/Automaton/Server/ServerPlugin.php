@@ -30,7 +30,7 @@ class ServerPlugin extends AbstractPlugin
             foreach ($method->getParameters() as $parameter) {
                 $parameters[$parameter->getName()] = array_key_exists($parameter->getName(), $config) ? $config[$parameter->getName()] : null;
             }
-            $method->invoke($session, $parameters);
+            $method->invokeArgs($session, $parameters);
         }
         return $this->registerInstance($name, $server);
     }

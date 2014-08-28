@@ -23,10 +23,10 @@ class Recipe
     {
         $reflection = new \ReflectionClass($this->classname);
         $recipe = $reflection->newInstance();
-        $prefix = str_replace("\\",":",strtolower(substr($reflection->getName(),strpos($reflection->getName(), 'Recipes')+8)));
+        $prefix = str_replace("\\", ":", strtolower(substr($reflection->getName(), strpos($reflection->getName(), 'Recipes') + 8)));
         $tasks = array();
-        foreach ( $reflection->getMethods() as $method ) {
-            if ( $annotation = $this->reader->getMethodAnnotation($method, 'Automaton\Recipe\Annotation\Task') ) {
+        foreach ($reflection->getMethods() as $method) {
+            if ($annotation = $this->reader->getMethodAnnotation($method, 'Automaton\Recipe\Annotation\Task')) {
                 $task = new Task($prefix . ':' . $method->getName(), $annotation->description, array($recipe, $method->getName()), $annotation->public);
                 $tasks[] = $task;
                 if ($alias = $this->reader->getMethodAnnotation($method, 'Automaton\Recipe\Annotation\Alias')) {
@@ -40,11 +40,11 @@ class Recipe
     public function befores()
     {
         $reflection = new \ReflectionClass($this->classname);
-        $prefix = str_replace("\\",":",strtolower(substr($reflection->getName(),strpos($reflection->getName(), 'Recipes')+8)));
+        $prefix = str_replace("\\", ":", strtolower(substr($reflection->getName(), strpos($reflection->getName(), 'Recipes') + 8)));
         $tasks = array();
-        foreach ( $reflection->getMethods() as $method ) {
-            foreach ($this->reader->getMethodAnnotations($method, 'Automaton\Recipe\Annotation\Before')  as $before) {
-                $tasks[] = array($prefix.':'.$method->getShortName(), $before->task);
+        foreach ($reflection->getMethods() as $method) {
+            foreach ($this->reader->getMethodAnnotations($method, 'Automaton\Recipe\Annotation\Before') as $before) {
+                $tasks[] = array($prefix . ':' . $method->getShortName(), $before->task, $before->priority);
             }
         }
         return $tasks;
@@ -53,11 +53,11 @@ class Recipe
     public function afters()
     {
         $reflection = new \ReflectionClass($this->classname);
-        $prefix = str_replace("\\",":",strtolower(substr($reflection->getName(),strpos($reflection->getName(), 'Recipes')+8)));
+        $prefix = str_replace("\\", ":", strtolower(substr($reflection->getName(), strpos($reflection->getName(), 'Recipes') + 8)));
         $tasks = array();
-        foreach ( $reflection->getMethods() as $method ) {
-            foreach ($this->reader->getMethodAnnotations($method, 'Automaton\Recipe\Annotation\After')  as $after) {
-                $tasks[] = array($prefix.':'.$method->getShortName(), $after->task);
+        foreach ($reflection->getMethods() as $method) {
+            foreach ($this->reader->getMethodAnnotations($method, 'Automaton\Recipe\Annotation\After') as $after) {
+                $tasks[] = array($prefix . ':' . $method->getShortName(), $after->task, $after->priority);
             }
         }
         return $tasks;

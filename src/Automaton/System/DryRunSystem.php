@@ -34,4 +34,13 @@ class DryRunSystem implements SystemInterface
     {
         $this->output->writeln($command);
     }
+
+    public function getTempDir()
+    {
+        return '/tmp';
+    }
+
+    public function setOutput(OutputInterface $output = null ){
+
+    }
 }

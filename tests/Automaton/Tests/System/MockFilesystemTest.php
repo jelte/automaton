@@ -28,7 +28,7 @@ class MockFilesystemTest extends \PHPUnit_Framework_TestCase
      */
     public function outputsCalls()
     {
-        $this->output->expects($this->once())->method('writeln')->with('mkdir test');
+        $this->output->expects($this->once())->method('writeln')->with('mkdir');
         $this->system->mkdir('test');
     }
 } 

@@ -8,4 +8,6 @@ interface SystemInterface {
     public function run($command);
 
     public function getFilesystem();
+
+    public function getTempDir();
 }

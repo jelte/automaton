@@ -1,0 +1,9 @@
+services:
+  automaton.plugin.repository:
+    class: Automaton\Repository\RepositoryPlugin
+  automaton.event_subscriber.repository:
+    class: Automaton\Repository\RepositoryPluginEventSubscriber
+    arguments: [@automaton.plugin.repository]
+    tags:
+      - { name: kernel.event_subscriber, event: automaton.task_command.configure }
+      - { name: kernel.event_subscriber, event: automaton.task.on_run }

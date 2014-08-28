@@ -18,7 +18,7 @@ class Environment
      * @param ServerInterface $server
      *
      * @Automaton\Task
-     * @Automaton\Before(task="preDeploy")
+     * @Automaton\Before(task="deploy")
      */
     public function init(ServerInterface $server)
     {
@@ -33,16 +33,12 @@ class Environment
      * @param OutputInterface $output
      *
      * @Automaton\Task
-     * @Automaton\After(task="postDeploy")
+     * @Automaton\After(task="deploy", priority=999)
      */
     public function createSymlink(RuntimeEnvironment $env, ServerInterface $server, OutputInterface $output)
     {
         $current = $server->cwd('release');
         $release = $server->cwd("releases/{$env->get('release')}");
-        if ($output->getVerbosity() == OutputInterface::VERBOSITY_DEBUG) {
-            $time = date('H:i');
-            $output->writeln("<info>DEBUG</info> [{$time}][@{$server->getName()}]$ rm -f {$current} && ln -s {$release} {$current}");
-        }
         $server->run("rm -f {$current} && ln -s {$release} {$current}");
     }
 
@@ -55,7 +51,7 @@ class Environment
      */
     public function cleanup(ServerInterface $server, StageInterface $stage)
     {
-        $releases = $server->run("ls -t {$server->cwd('releases')}");
+        $releases = explode("\n", $server->run("ls -t {$server->cwd('releases')}"));
 
         $keep = $stage->get('keep_releases', 3);
 

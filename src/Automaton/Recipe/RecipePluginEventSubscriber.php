@@ -6,7 +6,6 @@ namespace Automaton\Recipe;
 use Automaton\Console\Command\Event\ApplicationEvent;
 use Automaton\Console\Command\RunTaskCommand;
 use Automaton\Plugin\AbstractPluginEventSubscriber;
-use Automaton\Recipe\RecipePlugin;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RecipePluginEventSubscriber extends AbstractPluginEventSubscriber
@@ -41,16 +40,16 @@ class RecipePluginEventSubscriber extends AbstractPluginEventSubscriber
         $eventDispatcher = $application->getContainer()->get('event_dispatcher');
         $automaton = $application->getContainer()->get('automaton');
         foreach ($this->plugin->all() as $recipe) {
-            foreach ( $recipe->tasks() as $task ) {
+            foreach ($recipe->tasks() as $task) {
                 call_user_func_array(array($automaton, 'task'), array($task->getName(), $task));
-                if ( $task->isPublic() ) {
+                if ($task->isPublic()) {
                     $application->add(new RunTaskCommand($task, $eventDispatcher));
                 }
             }
-            foreach ( $recipe->befores() as $before ) {
+            foreach ($recipe->befores() as $before) {
                 call_user_func_array(array($automaton, 'before'), $before);
             }
-            foreach ( $recipe->afters() as $after ) {
+            foreach ($recipe->afters() as $after) {
                 call_user_func_array(array($automaton, 'after'), $after);
             }
         }

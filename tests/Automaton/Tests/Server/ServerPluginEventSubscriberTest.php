@@ -57,7 +57,7 @@ class ServerPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function setsServersOnPreRun()
     {
-        $servers = array('server-1' => null, 'server-2' => null);
+        $servers = array('server-1' => $this->getMock('Automaton\Server\ServerInterface'), 'server-2' => $this->getMock('Automaton\Server\ServerInterface'));
         $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
         $this->plugin->expects($this->once())->method('all')->willReturn($servers);
         $this->runtimeEnvironment->expects($this->once())->method('getInput')->willReturn($this->input);
@@ -71,17 +71,16 @@ class ServerPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
     public function setsSpecificServerOnPreRun()
     {
 
-        $servers = array('server-1' => null, 'server-2' => null);
+        $servers = array('server-1' => $this->getMock('Automaton\Server\ServerInterface'), 'server-2' => $this->getMock('Automaton\Server\ServerInterface'));
         $keys = array_keys($servers);
         $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
         $this->plugin->expects($this->once())->method('all')->willReturn($servers);
 
-        $this->input->expects($this->exactly(2))->method('hasOption')->withConsecutive(
+        $this->input->expects($this->exactly(2))->method('getOption')->withConsecutive(
             $this->equalTo('dry-run'), $this->equalTo('server')
-        )->will($this->onConsecutiveCalls(false, true));
-        $this->input->expects($this->once())->method('getOption')->with($this->equalTo('server'))->willReturn($keys[0]);
+        )->will($this->onConsecutiveCalls(false, $keys[0]));
         $this->runtimeEnvironment->expects($this->once())->method('getInput')->willReturn($this->input);
-        $this->runtimeEnvironment->expects($this->once())->method('set')->with($this->equalTo('servers'), $this->equalTo(array('server-1' => null)));
+        $this->runtimeEnvironment->expects($this->once())->method('set')->with($this->equalTo('servers'), $this->equalTo(array('server-1' => $servers['server-1'])));
         $this->subscriber->preTaskRun($this->taskEvent);
     }
 
@@ -96,7 +95,7 @@ class ServerPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($env);
         $this->plugin->expects($this->once())->method('all')->willReturn($servers);
 
-        $this->input->expects($this->exactly(2))->method('hasOption')->withConsecutive(
+        $this->input->expects($this->exactly(2))->method('getOption')->withConsecutive(
             $this->equalTo('dry-run'), $this->equalTo('server')
         )->will($this->onConsecutiveCalls(true, false));
         $this->subscriber->preTaskRun($this->taskEvent);

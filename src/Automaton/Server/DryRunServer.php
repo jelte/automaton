@@ -42,6 +42,11 @@ class DryRunServer extends AbstractServer
     {
     }
 
+    public function cwd($path)
+    {
+        return $this->server->cwd($path);
+    }
+
     /**
      * {@inheritdoc}
      */

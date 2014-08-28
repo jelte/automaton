@@ -52,15 +52,18 @@ class ServerPluginEventSubscriber extends AbstractPluginEventSubscriber
         $input = $environment->getInput();
         $servers = $this->plugin->all();
 
-        if ( $input->hasOption('dry-run') ) {
+        if ( $input->getOption('dry-run') ) {
             $output = $environment->getOutput();
             $servers = array_map(function($value) use ($output) {
                return new DryRunServer($value, $output);
             },$servers);
         }
-        if ($input->hasOption('server') && $serverName = $input->getOption('server')) {
+        if ($serverName = $input->getOption('server')) {
             $servers = array($serverName => $servers[$serverName]);
         }
+        array_walk($servers, function($value) use ( $environment ){
+            $value->setOutput($environment->getOutput());
+        });
         $environment->set('servers',$servers);
     }
 

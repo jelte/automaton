@@ -8,6 +8,7 @@ use Automaton\Console\Command\Event\TaskEvent;
 use Automaton\Exception\InvalidArgumentException;
 use Automaton\Plugin\AbstractPluginEventSubscriber;
 use Automaton\RuntimeEnvironment;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
 {
@@ -37,9 +38,8 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
         $task = $taskEvent->getTask();
         $runtimeEnvironment = $taskEvent->getRuntimeEnvironment();
         $this->before($task, $runtimeEnvironment);
-
         if ($task instanceof ExecutableTaskInterface) {
-            $this->doInvoke($task->getCallable(), $runtimeEnvironment);
+            $this->doInvoke($task, $task->getCallable(), $runtimeEnvironment, $runtimeEnvironment->getOutput());
         } else if ($task instanceof GroupTaskInterface) {
             foreach ($task->getTasks() as $subTask) {
                 $this->onInvoke(new TaskEvent($subTask, $runtimeEnvironment));
@@ -54,7 +54,7 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
      * @param \ReflectionMethod|\ReflectionFunction|array $callable
      * @param RuntimeEnvironment $runtimeEnvironment
      */
-    protected function doInvoke($callable, RuntimeEnvironment $runtimeEnvironment)
+    protected function doInvoke(ExecutableTaskInterface $task, $callable, RuntimeEnvironment $runtimeEnvironment, OutputInterface $output = null)
     {
         $object = null;
         if ( is_array($callable) ) {
@@ -75,7 +75,13 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
             }
             $args[] = $value;
         }
+        if ( null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
+            $runtimeEnvironment->getOutput()->write(str_pad($task->getName(), 40, '.'));
+        }
         $callable->invokeArgs($object, $args);
+        if ( null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
+            $runtimeEnvironment->getOutput()->writeln("<info>✔</info>");
+        }
     }
 
     protected function before(TaskInterface $task, RuntimeEnvironment $runtimeEnvironment)

@@ -3,21 +3,34 @@ imports:
 
 automaton:
   recipe:
-    common: Automaton\Resources\Recipes\Common
-    composer: Automaton\Resources\Recipes\Composer
-    source: Automaton\Resources\Recipes\Source
-    repository: Automaton\Resources\Recipes\Repository
-    environment: Automaton\Resources\Recipes\Environment
+    - Automaton\Resources\Recipes\Common
+    - Automaton\Resources\Recipes\Composer
+    - Automaton\Resources\Recipes\Source
+    - Automaton\Resources\Recipes\Repository
+    - Automaton\Resources\Recipes\Environment
   server:
     develop:
       -
         host: www.khepri.be
         auth: publicKeyFile
-        username: khepri
+        username: markant
+        path: ~/test
   stage:
     develop:
       servers: [develop]
-      options: {branch: develop}
+      options: {branch: master}
   task:
     _config: src/Automaton/Resources/configs/task.yml
     debug: Automaton\Recipe\Common::debug
+  repository: git@github.com:jelte/markant-zwijnaarde.git
+  branch: master
+  excludes:
+    - \.git
+    - \.gitignore
+    - cache
+    - deployment
+    - logs
+    - phpunit\.xml\.dist
+    - tests
+    - resources
+    - web\/app_dev.php

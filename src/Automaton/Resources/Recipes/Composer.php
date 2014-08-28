@@ -23,12 +23,7 @@ class Composer
      */
     public function download(ServerInterface $server, OutputInterface $output)
     {
-        $command = "curl -s http://getcomposer.org/installer | php";
-        if ($output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG) {
-            $time = date('H:i');
-            $output->writeln("<info>DEBUG</info> [{$time}][@{$server->getName()}]$ $command");
-        }
-        $server->run($command);
+        $server->run("curl -s http://getcomposer.org/installer | php");
     }
 
     /**
@@ -36,14 +31,10 @@ class Composer
      * @param OutputInterface $output
      *
      * @Automaton\Task
+     * @Automaton\After(task="deploy", priority=20)
      */
     public function install(ServerInterface $server, OutputInterface $output)
     {
-        $command = "php composer.phar install --no-dev --verbose --prefer-dist --optimize-autoloader --no-progress > composer.log";
-        if ($output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG) {
-            $time = date('H:i');
-            $output->writeln("<info>DEBUG</info> [{$time}][@{$server->getName()}]$ $command");
-        }
-        print $server->run($command);
+         print $server->run("php composer.phar install --no-dev --verbose --prefer-dist --optimize-autoloader --no-progress > composer.log");
     }
 }

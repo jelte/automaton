@@ -56,9 +56,9 @@ class SystemPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
     public function preTaskRunAddsSystemAndFilesystemToEnvironment()
     {
         $this->runtimeEnvironment->expects($this->once())->method('getInput')->willReturn($this->input);
-        $this->runtimeEnvironment->expects($this->once())->method('getOutput')->willReturn($this->output);
+        $this->runtimeEnvironment->expects($this->exactly(2))->method('getOutput')->willReturn($this->output);
         $this->taskEvent->expects($this->once(2))->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
-        $this->input->expects($this->once())->method('hasOption')->with($this->equalTo('dry-run'))->will($this->returnValue(true));
+        $this->input->expects($this->once())->method('getOption')->with($this->equalTo('dry-run'))->will($this->returnValue(true));
         $this->runtimeEnvironment->expects($this->exactly(2))->method('set')->withConsecutive(array('system'), array('filesystem'));
 
         $this->subscriber->preTaskRun($this->taskEvent);

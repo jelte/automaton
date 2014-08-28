@@ -8,8 +8,13 @@ use Automaton\Plugin\AbstractPlugin;
 
 class RecipePlugin extends AbstractPlugin
 {
-    public function recipe($name, $classname)
+    public function recipe($recipes)
     {
-        $this->registerInstance($name, new Recipe($classname));
+        if ( !is_array($recipes) ) {
+            $recipes = array($recipes);
+        }
+        foreach ( $recipes as $classname ) {
+            $this->registerInstance($classname, new Recipe($classname));
+        }
     }
 }

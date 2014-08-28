@@ -49,9 +49,10 @@ class SystemPluginEventSubscriber implements EventSubscriberInterface
         $input = $environment->getInput();
 
         $system = $this->system;
-        if ( $input->hasOption('dry-run') ) {
+        if ( $input->getOption('dry-run') ) {
             $system = new DryRunSystem($environment->getOutput());
         }
+        $system->setOutput($environment->getOutput());
         $environment->set('system', $system);
         $environment->set('filesystem', $system->getFilesystem());
     }

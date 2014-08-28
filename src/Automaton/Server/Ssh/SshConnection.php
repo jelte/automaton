@@ -22,7 +22,7 @@ class SshConnection implements ConnectionInterface
 
     public function upload($local, $remote)
     {
-        throw new \DomainException('Not yet supported');
+        return $this->session->upload($local, $remote);
     }
 
     public function download($remote, $local)

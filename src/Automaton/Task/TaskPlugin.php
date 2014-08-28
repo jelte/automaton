@@ -18,7 +18,7 @@ class TaskPlugin extends AbstractPlugin
     public function task($name, $callable, $description = null)
     {
         if ($callable instanceof TaskInterface) {
-            return $this->registerInstance($name, new Alias($name, $callable));
+            return $this->registerInstance($name, $callable);
         }
         if ($callable instanceof \Closure || is_callable($callable)) {
             return $this->registerInstance($name, new Task($name, $description, $callable));
@@ -45,7 +45,7 @@ class TaskPlugin extends AbstractPlugin
             $task = $this->get($task);
         }
 
-        return $this->task($name, $task);
+        return $this->task($name, new Alias($name, $task));
     }
 
     /**
@@ -53,9 +53,9 @@ class TaskPlugin extends AbstractPlugin
      * @param $before
      * @throws \Automaton\Exception\InvalidArgumentException
      */
-    public function before($task, $before)
+    public function before($task, $before, $priority = 0)
     {
-        $this->get($before)->before($this->get($task));
+        $this->get($before)->before($this->get($task), $priority);
     }
 
     /**
@@ -63,8 +63,8 @@ class TaskPlugin extends AbstractPlugin
      * @param $after
      * @throws \Automaton\Exception\InvalidArgumentException
      */
-    public function after($task, $after)
+    public function after($task, $after, $priority = 0)
     {
-        $this->get($after)->after($this->get($task));
+        $this->get($after)->after($this->get($task), $priority);
     }
 }

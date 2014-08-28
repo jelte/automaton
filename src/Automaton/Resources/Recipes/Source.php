@@ -19,7 +19,7 @@ class Source
      * @param FilesystemInterface $filesystem
      *
      * @Automaton\Task
-     * @Automaton\After(task="deploy")
+     * @Automaton\After(task="deploy", priority=10)
      */
     public function prepare(RuntimeEnvironment $env, FilesystemInterface $filesystem)
     {
@@ -55,10 +55,6 @@ class Source
         $archive = "{$release}.tar.gz";
         $system->run("cd {$path} && tar czf {$archive} {$release}");
         $env->set('release.archive', $archive);
-        if ($output->getVerbosity() == OutputInterface::VERBOSITY_DEBUG) {
-            $time = date('H:i');
-            $output->writeln("<info>DEBUG</info> [{$time}][@{$server->getName()}]$ cd {$path} && tar czf {$archive} {$release}");
-        }
     }
 
     /**
@@ -90,10 +86,6 @@ class Source
         $target = $server->cwd('releases');
         $release = $env->get('release');
         $finalTarget = $server->cwd("releases/{$release}");
-        if ($output->getVerbosity() == OutputInterface::VERBOSITY_DEBUG) {
-            $time = date('H:i');
-            $output->writeln("<info>DEBUG</info> [{$time}][@{$server->getName()}]$ cd {$target} && tar xzf {$archive} 1>archive.stdout.log 2>archive.stderr.log && rm {$archive} && cd {$finalTarget}");
-        }
         $server->run("cd {$target} && tar xzf {$archive} 1>archive.stdout.log 2>archive.stderr.log && rm {$archive} && cd {$finalTarget}");
     }
 }

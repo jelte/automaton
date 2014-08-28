@@ -10,9 +10,9 @@ abstract class AbstractTask implements TaskInterface
 
     protected $description;
 
-    protected $before = [];
+    private $before = [];
 
-    protected $after = [];
+    private $after = [];
 
     protected $public = false;
 
@@ -59,6 +59,7 @@ abstract class AbstractTask implements TaskInterface
     {
         if ( !isset($this->after[$priority]) ) $this->after[$priority] = array();
         $this->after[$priority][] = $task;
+
     }
 
     public function getAfter()

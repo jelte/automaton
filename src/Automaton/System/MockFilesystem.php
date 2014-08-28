@@ -17,6 +17,6 @@ class MockFilesystem implements FilesystemInterface
 
     public function __call($name, $arguments)
     {
-        $this->output->writeln(sprintf('%s %s',$name,implode(' ', $arguments)));
+        $this->output->writeln(sprintf('%s',$name));
     }
 }

@@ -11,6 +11,7 @@ class SshServer extends AbstractServer
      */
     public function run($command)
     {
+        $this->debug($command);
         return $this->connection->run($command);
     }
 
@@ -19,6 +20,7 @@ class SshServer extends AbstractServer
      */
     public function upload($local, $remote)
     {
+        $this->debug("upload {$local} to {$remote}");
         return $this->connection->upload($local, $remote);
     }
 }

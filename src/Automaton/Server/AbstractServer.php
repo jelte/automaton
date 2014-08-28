@@ -5,6 +5,7 @@ namespace Automaton\Server;
 
 
 use Automaton\Server\Ssh\ConnectionInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractServer implements ServerInterface
 {
@@ -22,6 +23,11 @@ abstract class AbstractServer implements ServerInterface
     protected $root;
 
     protected $cwd;
+
+    /**
+     * @var OutputInterface
+     */
+    private $output;
 
     public function __construct($name, ConnectionInterface $connection, $root = null)
     {
@@ -65,5 +71,18 @@ abstract class AbstractServer implements ServerInterface
         if ( method_exists($this->connection, $method) ) {
             return call_user_func_array(array($this->connection, $method), $arguments);
         }
+    }
+
+    protected function debug($command)
+    {
+        if (null !== $this->output && $this->output->getVerbosity() == OutputInterface::VERBOSITY_DEBUG) {
+            $time = date('H:i');
+            $this->output->writeln("<info>DEBUG</info> [{$time}][{$this->getName()}]$ {$command}");
+        }
+    }
+
+    public function setOutput(OutputInterface $output = null)
+    {
+        $this->output = $output;
     }
 }
