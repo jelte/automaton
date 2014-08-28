@@ -33,6 +33,28 @@ class Composer
      */
     public function install(ServerInterface $server)
     {
-         print $server->run("php composer.phar install --no-dev --verbose --prefer-dist --optimize-autoloader --no-progress > composer.log");
+         $server->run("php composer.phar install --no-dev --verbose --prefer-dist --optimize-autoloader --no-progress > composer.log");
+    }
+
+    /**
+     * @param ServerInterface $server
+     *
+     * @Automaton\Task
+     * @Automaton\Before(task="composer:install")
+     */
+    public function copyPreviousVendors(ServerInterface $server)
+    {
+        $server->run("cp -R ../../release/vendor .");
+    }
+
+    /**
+     * @param ServerInterface $server
+     *
+     * @Automaton\Task
+     * @Automaton\After(task="composer:install")
+     */
+    public function cleanup(ServerInterface $server)
+    {
+        $server->run("rm -rf composer.*");
     }
 }

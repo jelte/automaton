@@ -50,7 +50,7 @@ class Environment
      */
     public function cleanup(ServerInterface $server, StageInterface $stage)
     {
-        $releases = explode("\n", $server->run("ls -t {$server->cwd('releases')}"));
+        $releases = explode("\n", $server->run("ls -t1 --color=none {$server->cwd('releases')}")) ;
 
         $keep = $stage->get('keep_releases', 3);
 
@@ -60,7 +60,7 @@ class Environment
         }
 
         foreach ($releases as $release) {
-            $server->run("rm -rf releases/{$release}");
+            $server->run("rm -rf {$server->cwd('releases')}/{$release}");
         }
     }
 }

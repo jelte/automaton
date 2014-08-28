@@ -22,12 +22,12 @@ automaton:
   repository: git@github.com:jelte/markant-zwijnaarde.git
   branch: master
   excludes:
-    - \.git
-    - \.gitignore
+    - .git
+    - .gitignore
     - cache
     - deployment
     - logs
-    - phpunit\.xml\.dist
+    - phpunit.xml.dist
     - tests
     - resources
-    - web\/app_dev.php
+    - web/app_dev.php

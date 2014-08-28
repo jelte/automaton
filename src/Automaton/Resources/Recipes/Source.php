@@ -83,6 +83,6 @@ class Source
         $target = $server->cwd('releases');
         $release = $env->get('release');
         $finalTarget = $server->cwd("releases/{$release}");
-        $server->run("cd {$target} && tar xzf {$archive} 1>archive.stdout.log 2>archive.stderr.log && rm {$archive} && cd {$finalTarget}");
+        $server->run("cd {$target} && tar xzf {$archive} 1>archive.stdout.log 2>archive.stderr.log && rm archive.stdout.log && rm archive.stderr.log && rm {$archive} && cd {$finalTarget}");
     }
 }
