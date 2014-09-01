@@ -12,16 +12,6 @@ class PhpSeclibConnection implements ConnectionInterface
      */
     private $session;
 
-    /**
-     * @var Uri
-     */
-    protected $uri;
-
-    /**
-     * @var Configuration
-     */
-    protected $configuration;
-
     public function __construct(\Net_SFTP $session)
     {
         $this->session = $session;
