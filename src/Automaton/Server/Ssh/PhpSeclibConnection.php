@@ -3,8 +3,6 @@
 
 namespace Automaton\Server\Ssh;
 
-use Automaton\Utils\Uri;
-
 class PhpSeclibConnection implements ConnectionInterface
 {
     /**
@@ -54,4 +52,4 @@ class PhpSeclibConnection implements ConnectionInterface
             throw new \RuntimeException(implode($this->session->getSFTPErrors(), "\n"));
         }
     }
-} 
+}
