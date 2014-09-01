@@ -31,7 +31,7 @@ class RepositoryPluginEventSubscriber extends AbstractPluginEventSubscriber
      */
     public function configureTaskCommand(TaskCommandEvent $event)
     {
-        $event->getCommand()->addOption('branch', 'b', InputOption::VALUE_REQUIRED, 'Deploy a specific branch', $this->plugin->getBranch());
+        $event->getCommand()->addOption('branch', 'b', InputOption::VALUE_REQUIRED, 'Deploy a specific branch', $this->plugin->get('branch'));
     }
 
     /**
@@ -42,8 +42,8 @@ class RepositoryPluginEventSubscriber extends AbstractPluginEventSubscriber
         $environment = $event->getRuntimeEnvironment();
         $input = $environment->getInput();
 
-        $environment->set('repository', $this->plugin->getRepository());
+        $environment->set('repository', $this->plugin->get('repository'));
         $environment->set('branch', $input->getOption('branch'));
-        $environment->set('excludes', $this->plugin->getExcludes());
+        $environment->set('excludes', $this->plugin->get('excludes'));
     }
 }
