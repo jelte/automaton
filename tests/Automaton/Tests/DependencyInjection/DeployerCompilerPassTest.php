@@ -53,7 +53,7 @@ class AutomatonCompilerPassTest extends \PHPUnit_Framework_TestCase
         $this->containerBuilder->register('automaton', 'Automaton\Automaton');
 
         $this->containerBuilder->register('automaton.plugin.server', 'Automaton\Server\ServerPlugin');
-        $this->containerBuilder->register('automaton.plugin.stage', 'Automaton\Server\StagePlugin');
+        $this->containerBuilder->register('automaton.plugin.stage', 'Automaton\Stage\StagePlugin');
         $this->mockProcessor->expects($this->once())->method('processConfiguration')->will($this->returnValue($this->config));
 
         $this->compilerPass->process($this->containerBuilder);
