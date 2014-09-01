@@ -138,6 +138,7 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
         $task->expects($this->once())->method('getBefore')->willReturn($before);
         $task->expects($this->once())->method('getAfter')->willReturn($after);
 
+        $task->expects($this->any())->method('showProgress')->willReturn(false);
         return $task;
     }
 }

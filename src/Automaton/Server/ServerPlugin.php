@@ -18,6 +18,8 @@ class ServerPlugin extends AbstractPlugin
      */
     public function server($name, array $config)
     {
+        if ( !isset($config['auth']) ) $config['auth'] = null;
+        if ( !isset($config['username'])) $config['username'] = null;
         $hops = array_key_exists('gateways', $config) ? $config['gateways'] : array();
         if ( isset($config['type']) && $config['type'] == 'ssh2-automaton' ) {
             $session = new Session($config['host'],

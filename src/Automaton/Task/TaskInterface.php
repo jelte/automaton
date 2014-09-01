@@ -19,4 +19,6 @@ interface TaskInterface
     public function getAfter();
 
     public function isPublic();
+
+    public function showProgress();
 }
