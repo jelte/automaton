@@ -37,24 +37,43 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
     {
         $task = $taskEvent->getTask();
         $runtimeEnvironment = $taskEvent->getRuntimeEnvironment();
-        $this->before($task, $runtimeEnvironment);
-        if ($task instanceof ExecutableTaskInterface) {
-            $this->doInvoke($task, $task->getCallable(), $runtimeEnvironment, $runtimeEnvironment->getOutput());
-        } else if ($task instanceof GroupTaskInterface) {
-            foreach ($task->getTasks() as $subTask) {
-                $this->onInvoke(new TaskEvent($subTask, $runtimeEnvironment));
+        $output = $runtimeEnvironment->getOutput();
+
+            $this->before($task, $runtimeEnvironment);
+            if ($task instanceof ExecutableTaskInterface) {
+                try {
+                    if ($task->showProgress() && null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
+                        $runtimeEnvironment->getOutput()->write(str_pad($task->getName(), 40, '.'));
+                    }
+                    $this->doInvoke($task->getCallable(), $runtimeEnvironment);
+                    if ($task->showProgress() && null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
+                        $runtimeEnvironment->getOutput()->writeln("<info>✔</info>");
+                    }
+                } catch ( \RuntimeException $e ) {
+                    if ($task->showProgress() && null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
+                        $runtimeEnvironment->getOutput()->writeln("<error>x</error>");
+                    }
+                    if ( $this->plugin->get('rollback') ) {
+                        $this->onInvoke(new TaskEvent($this->plugin->get('rollback'), $runtimeEnvironment));
+                    }
+                    throw $e;
+                }
+            } else if ($task instanceof GroupTaskInterface) {
+                foreach ($task->getTasks() as $subTask) {
+                    $this->onInvoke(new TaskEvent($subTask, $runtimeEnvironment));
+                }
+            } elseif ($task instanceof AliasInterface) {
+                $this->onInvoke(new TaskEvent($task->getOriginal(), $runtimeEnvironment));
             }
-        } elseif ($task instanceof AliasInterface) {
-            $this->onInvoke(new TaskEvent($task->getOriginal(), $runtimeEnvironment));
-        }
-        $this->after($task, $runtimeEnvironment);
+            $this->after($task, $runtimeEnvironment);
+
     }
 
     /**
      * @param \ReflectionMethod|\ReflectionFunction|array $callable
      * @param RuntimeEnvironment $runtimeEnvironment
      */
-    protected function doInvoke(ExecutableTaskInterface $task, $callable, RuntimeEnvironment $runtimeEnvironment, OutputInterface $output = null)
+    protected function doInvoke($callable, RuntimeEnvironment $runtimeEnvironment)
     {
         $object = null;
         if ( is_array($callable) ) {
@@ -75,13 +94,7 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
             }
             $args[] = $value;
         }
-        if ( null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
-            $runtimeEnvironment->getOutput()->write(str_pad($task->getName(), 40, '.'));
-        }
         $callable->invokeArgs($object, $args);
-        if ( null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
-            $runtimeEnvironment->getOutput()->writeln("<info>✔</info>");
-        }
     }
 
     protected function before(TaskInterface $task, RuntimeEnvironment $runtimeEnvironment)

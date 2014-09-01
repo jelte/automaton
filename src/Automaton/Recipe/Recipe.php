@@ -27,10 +27,10 @@ class Recipe
         $tasks = array();
         foreach ($reflection->getMethods() as $method) {
             if ($annotation = $this->reader->getMethodAnnotation($method, 'Automaton\Recipe\Annotation\Task')) {
-                $task = new Task($prefix . ':' . $method->getName(), $annotation->description, array($recipe, $method->getName()), $annotation->public);
+                $task = new Task($prefix . ':' . $method->getName(), $annotation->description, array($recipe, $method->getName()), $annotation->public, $annotation->progress);
                 $tasks[] = $task;
                 if ($alias = $this->reader->getMethodAnnotation($method, 'Automaton\Recipe\Annotation\Alias')) {
-                    $tasks[] = new Alias($alias->name, $task, $alias->public);
+                    $tasks[] = new Alias($alias->name, $task, $alias->public, $annotation->progress);
                 }
             }
         }

@@ -14,4 +14,5 @@ final class Task
 {
     public $description;
     public $public = false;
+    public $progress = true;
 }

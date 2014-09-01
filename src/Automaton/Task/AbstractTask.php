@@ -16,11 +16,14 @@ abstract class AbstractTask implements TaskInterface
 
     protected $public = false;
 
-    public function __construct($name, $description, $public)
+    protected $progress = true;
+
+    public function __construct($name, $description, $public, $progress)
     {
         $this->name = $name;
         $this->description = $description;
         $this->public = $public;
+        $this->progress = $progress;
     }
 
     public function getName()
@@ -31,6 +34,11 @@ abstract class AbstractTask implements TaskInterface
     public function isPublic()
     {
         return $this->public;
+    }
+
+    public function showProgress()
+    {
+        return $this->progress;
     }
 
     public function desc($description)
