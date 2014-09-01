@@ -23,11 +23,8 @@ class RepositoryPlugin extends AbstractPlugin
         $this->registerInstance('branch', $branch);
     }
 
-    public function excludes($excludes)
+    public function excludes(array $excludes)
     {
-        if ( !is_array($excludes)) {
-            throw new \Exception();
-        }
         $this->registerInstance('excludes', $excludes);
     }
 }

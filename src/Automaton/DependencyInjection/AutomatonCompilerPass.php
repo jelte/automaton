@@ -47,15 +47,24 @@ class AutomatonCompilerPass implements CompilerPassInterface
         foreach ( $config as $method => $plugin ) {
             if ( $container->hasDefinition($this->name.'.plugin.'.$method) ) {
                 $definition->addMethodCall('plugin', array(new Reference($this->name.'.plugin.'.$method)));
+                $pluginDefinition = $container->getDefinition($this->name.'.plugin.'.$method);
+                $reflectionClass = new \ReflectionClass($pluginDefinition->getClass());
             }
             if ( is_array($plugin) ) {
-                if (array_keys($plugin) === range(0, count($plugin) - 1)) {
+                $reflectionMethod = $reflectionClass->getMethod($method);
+                /** @var \ReflectionParameter[] $parameters */
+                $parameters = $reflectionMethod->getParameters();
+                if ( isset($parameters[0]) && $parameters[0]->isArray() ) {
                     $definition->addMethodCall($method, array(array_unique($plugin)));
                 } else {
                     foreach ($plugin as $name => $params) {
                         if (substr($name, 0, 1) !== '_') {
-                            $params = is_array($params) ? $params : array($params);
-                            array_unshift($params, $name);
+                            if ( count($parameters) == 2 && isset($parameters[1]) && $parameters[1]->isArray() ) {
+                                $params = array($name, $params);
+                            } else {
+                                $params = is_array($params) ? $params : array($params);
+                                array_unshift($params, $name);
+                            }
                             $definition->addMethodCall($method, $params);
                         }
                     }
