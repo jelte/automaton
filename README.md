@@ -18,7 +18,7 @@ PHP Automoton is developed for 5.4 and up, no support is offered for earlier ver
 Documentation
 -------------
 
-Documentation can be found on [jelte.github.io/php-automoton](http://jelte.github.io/php-automoton/)
+Documentation can be found on [automaton.khepri.be](http://automaton.khepri.be/)
 
 License
 -------
