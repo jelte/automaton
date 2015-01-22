@@ -57,7 +57,9 @@ class Environment
         }
 
         foreach ($releases as $release) {
-            $server->run("rm -rf {$server->cwd('releases')}/{$release}");
+            if ( !empty($release) ) {
+                $server->run("rm -rf {$server->cwd('releases')}/{$release}");
+            }
         }
     }
 }

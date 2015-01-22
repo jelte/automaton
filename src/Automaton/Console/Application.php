@@ -26,7 +26,7 @@ class Application extends BaseApplication
     {
         $this->stopwatch = new Stopwatch();
         parent::__construct($name, $version);
-        $this->configuration = null == $configuration?new ConfigurationLoader():$configuration;
+        $this->configuration = null === $configuration?new ConfigurationLoader():$configuration;
     }
 
     public function getContainer()

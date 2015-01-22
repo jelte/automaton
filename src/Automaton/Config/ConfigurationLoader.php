@@ -27,7 +27,7 @@ class ConfigurationLoader
 
     public function __construct(ContainerBuilder $container = null, $cwd = null)
     {
-        $this->cwd = null == $cwd ? getcwd() : $cwd;
+        $this->cwd = null === $cwd ? getcwd() : $cwd;
         $this->container = null === $container ? new ContainerBuilder() : $container;
     }
 

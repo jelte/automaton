@@ -4,17 +4,25 @@
 namespace Automaton\Task;
 
 
+use Automaton\Console\Command\Event\InvokeEvent;
 use Automaton\Console\Command\Event\TaskEvent;
 use Automaton\Exception\InvalidArgumentException;
 use Automaton\Plugin\AbstractPluginEventSubscriber;
 use Automaton\RuntimeEnvironment;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
 {
-    public function __construct(TaskPlugin $plugin)
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct(TaskPlugin $plugin, EventDispatcherInterface $eventDispatcher)
     {
         parent::__construct($plugin);
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -24,57 +32,77 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
     {
         return array(
             'automaton.task.run' => 'onRun',
-            'automaton.task.invoke' => 'onInvoke'
+            'automaton.task.pre_invoke' => 'preInvoke',
+            'automaton.task.invoke' => 'onInvoke',
+            'automaton.task.do_invoke' => 'doInvoke',
+            'automaton.task.post_invoke' => 'postInvoke'
         );
     }
 
-    public function onRun(TaskEvent $taskEvent)
-    {
-        $this->onInvoke($taskEvent);
-    }
-
-    public function onInvoke(TaskEvent $taskEvent)
+    public function preInvoke(TaskEvent $taskEvent)
     {
         $task = $taskEvent->getTask();
         $runtimeEnvironment = $taskEvent->getRuntimeEnvironment();
         $output = $runtimeEnvironment->getOutput();
-
-            $this->before($task, $runtimeEnvironment);
-            if ($task instanceof ExecutableTaskInterface) {
-                try {
-                    if ($task->showProgress() && null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
-                        $runtimeEnvironment->getOutput()->write(str_pad($task->getName(), 40, '.'));
-                    }
-                    $this->doInvoke($task->getCallable(), $runtimeEnvironment);
-                    if ($task->showProgress() && null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
-                        $runtimeEnvironment->getOutput()->writeln("<info>✔</info>");
-                    }
-                } catch ( \RuntimeException $e ) {
-                    if ($task->showProgress() && null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
-                        $runtimeEnvironment->getOutput()->writeln("<error>x</error>");
-                    }
-                    if ( $this->plugin->get('rollback') ) {
-                        $this->onInvoke(new TaskEvent($this->plugin->get('rollback'), $runtimeEnvironment));
-                    }
-                    throw $e;
-                }
-            } else if ($task instanceof GroupTaskInterface) {
-                foreach ($task->getTasks() as $subTask) {
-                    $this->onInvoke(new TaskEvent($subTask, $runtimeEnvironment));
-                }
-            } elseif ($task instanceof AliasInterface) {
-                $this->onInvoke(new TaskEvent($task->getOriginal(), $runtimeEnvironment));
-            }
-            $this->after($task, $runtimeEnvironment);
-
+        if ($task->showProgress() && null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
+            $runtimeEnvironment->getOutput()->write(str_pad($task->getName(), 40, '.'));
+        }
     }
 
-    /**
-     * @param \ReflectionMethod|\ReflectionFunction|array $callable
-     * @param RuntimeEnvironment $runtimeEnvironment
-     */
-    protected function doInvoke($callable, RuntimeEnvironment $runtimeEnvironment)
+    public function postInvoke(TaskEvent $taskEvent)
     {
+        $task = $taskEvent->getTask();
+        $runtimeEnvironment = $taskEvent->getRuntimeEnvironment();
+        $output = $runtimeEnvironment->getOutput();
+        if ($task->showProgress() && null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
+            $runtimeEnvironment->getOutput()->writeln("<info>✔</info>");
+        }
+    }
+
+    public function rollback(TaskEvent $taskEvent)
+    {
+        $task = $taskEvent->getTask();
+        $runtimeEnvironment = $taskEvent->getRuntimeEnvironment();
+        $output = $runtimeEnvironment->getOutput();
+        if ($task->showProgress() && null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
+            $runtimeEnvironment->getOutput()->writeln("<error>x</error>");
+        }
+        $this->onRun(new TaskEvent($this->plugin->get('rollback'), $runtimeEnvironment));
+    }
+
+    public function onRun(TaskEvent $taskEvent)
+    {
+        $task = $taskEvent->getTask();
+        $runtimeEnvironment = $taskEvent->getRuntimeEnvironment();
+        $this->before($task, $runtimeEnvironment);
+        if ($task instanceof ExecutableTaskInterface) {
+            try {
+                $this->eventDispatcher->dispatch('automaton.task.pre_invoke', new TaskEvent($task, $runtimeEnvironment));
+                $this->eventDispatcher->dispatch('automaton.task.invoke', new TaskEvent($task, $runtimeEnvironment));
+                $this->eventDispatcher->dispatch('automaton.task.post_invoke', new TaskEvent($task, $runtimeEnvironment));
+            } catch ( \RuntimeException $e ) {
+                $this->eventDispatcher->dispatch('automaton.task.rollback', new TaskEvent($task, $runtimeEnvironment));
+                throw $e;
+            }
+        } else if ($task instanceof GroupTaskInterface) {
+            foreach ($task->getTasks() as $subTask) {
+                $this->onRun(new TaskEvent($subTask, $runtimeEnvironment));
+            }
+        } elseif ($task instanceof AliasInterface) {
+            $this->onRun(new TaskEvent($task->getOriginal(), $runtimeEnvironment));
+        }
+        $this->after($task, $runtimeEnvironment);
+    }
+
+    public function onInvoke(TaskEvent $taskEvent)
+    {
+        $this->eventDispatcher->dispatch('automaton.task.do_invoke', new InvokeEvent($taskEvent->getTask(), $taskEvent->getRuntimeEnvironment()));
+    }
+
+    public  function doInvoke(InvokeEvent $invokeEvent)
+    {
+        $callable = $invokeEvent->getCallable();
+        $runtimeEnvironment = $invokeEvent->getRuntimeEnvironment();
         $object = null;
         if ( is_array($callable) ) {
             list($object, $method) = $callable;
@@ -101,7 +129,7 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
     {
         foreach ($task->getBefore() as $before) {
             foreach ( $before as $task ) {
-                $this->onInvoke(new TaskEvent($task, $runtimeEnvironment));
+                $this->onRun(new TaskEvent($task, $runtimeEnvironment));
             }
         }
     }
@@ -110,7 +138,7 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
     {
         foreach ($task->getAfter() as $after) {
             foreach ( $after as $task ) {
-                $this->onInvoke(new TaskEvent($task, $runtimeEnvironment));
+                $this->onRun(new TaskEvent($task, $runtimeEnvironment));
             }
         }
     }

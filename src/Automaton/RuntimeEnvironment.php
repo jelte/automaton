@@ -42,6 +42,9 @@ class RuntimeEnvironment
         return isset($this->values[$name]) ? $this->values[$name] : $default;
     }
 
+    /**
+     * @return InputInterface|null
+     */
     public function getInput()
     {
         return $this->get('input', null);

@@ -79,9 +79,21 @@ class Source
     public function extract(RuntimeEnvironment $env, ServerInterface $server)
     {
         $archive = "/tmp/{$env->get('release.archive')}";
+        $env->set('archive-path', $archive);
         $target = $server->cwd('releases');
-        $release = $env->get('release');
-        $finalTarget = $server->cwd("releases/{$release}");
-        $server->run("cd {$target} && tar xzf {$archive} 1>archive.stdout.log 2>archive.stderr.log && rm archive.stdout.log && rm archive.stderr.log && rm {$archive} && cd {$finalTarget}");
+
+        $server->run("cd {$target} && tar xzf {$archive} 1>archive.stdout.log 2>archive.stderr.log && rm archive.stdout.log && rm archive.stderr.log");
+    }
+
+    /**
+     * @param RuntimeEnvironment $env
+     * @param ServerInterface $server
+     *
+     * @Automaton\Task
+     * @Automaton\After(task="source:extract")
+     */
+    public function cleanup(RuntimeEnvironment $env, ServerInterface $server)
+    {
+        $server->run("[ -f {$env->get('archive-path')} ] && rm {$env->get('archive-path')}");
     }
 }

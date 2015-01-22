@@ -48,7 +48,7 @@ abstract class AbstractServer implements ServerInterface
 
     public function cwd($path)
     {
-        if ( $this->cwd == null ) {
+        if ( null === $this->cwd ) {
             $this->cwd = $this->root;
             if ( substr($this->cwd,0,1) != DIRECTORY_SEPARATOR && substr($this->cwd,0,1) != '~' ) {
                 $this->cwd = '~/'.$this->cwd;

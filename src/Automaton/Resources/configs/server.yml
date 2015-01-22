@@ -7,4 +7,4 @@ services:
     tags:
       - { name: kernel.event_subscriber, event: automaton.task_command.configure }
       - { name: kernel.event_subscriber, event: automaton.task.pre_run }
-      - { name: kernel.event_subscriber, event: automaton.task.on_run }
+      - { name: kernel.event_subscriber, event: automaton.task.invoke }

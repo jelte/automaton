@@ -1,0 +1,9 @@
+services:
+  automaton.plugin.role:
+    class: Automaton\Role\RolePlugin
+  automaton.event_subscriber.role:
+    class: Automaton\Role\RolePluginEventSubscriber
+    arguments: [@automaton.plugin.role]
+    tags:
+      - { name: kernel.event_subscriber, event: automaton.task_command.configure }
+      - { name: kernel.event_subscriber, event: automaton.task.pre_run }

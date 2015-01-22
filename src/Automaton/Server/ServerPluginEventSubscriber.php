@@ -3,6 +3,7 @@
 
 namespace Automaton\Server;
 
+use Automaton\Console\Command\Event\InvokeEvent;
 use Automaton\Console\Command\Event\TaskCommandEvent;
 use Automaton\Console\Command\Event\TaskEvent;
 use Automaton\Plugin\AbstractPluginEventSubscriber;
@@ -16,10 +17,10 @@ class ServerPluginEventSubscriber extends AbstractPluginEventSubscriber
      */
     protected $eventDispatcher;
 
-    public function __construct(ServerPlugin $plugin, EventDispatcherInterface $eventDispatcherInterface)
+    public function __construct(ServerPlugin $plugin, EventDispatcherInterface $eventDispatcher)
     {
         parent::__construct($plugin);
-        $this->eventDispatcher = $eventDispatcherInterface;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -30,7 +31,7 @@ class ServerPluginEventSubscriber extends AbstractPluginEventSubscriber
         return array(
             'automaton.task_command.configure' => 'configureTaskCommand',
             'automaton.task.pre_run' => array('preTaskRun', 99),
-            'automaton.task.run' => array('onRun',10)
+            'automaton.task.invoke' => array('onInvoke',10)
         );
     }
 
@@ -70,15 +71,31 @@ class ServerPluginEventSubscriber extends AbstractPluginEventSubscriber
     /**
      * @param TaskEvent $taskEvent
      */
-    public function onRun(TaskEvent $taskEvent)
+    public function onInvoke(TaskEvent $taskEvent)
     {
         $environment = $taskEvent->getRuntimeEnvironment();
         $task = $taskEvent->getTask();
-        $servers =  $environment->get('servers', array());
-        foreach ( $servers as $server ) {
-            $environment->set('server', $server);
-            $this->eventDispatcher->dispatch('automaton.task.invoke', new TaskEvent($task, $environment));
+        if ( $this->hasServerParameter($task->getCallable()) ) {
+            $servers = $environment->get('servers', array());
+            foreach ($servers as $server) {
+                $environment->set('server', $server);
+                $this->eventDispatcher->dispatch('automaton.task.do_invoke', new InvokeEvent($task, $environment));
+            }
+            $taskEvent->stopPropagation();
         }
-        $taskEvent->stopPropagation();
+    }
+
+    protected function hasServerParameter($callable)
+    {
+        if ( is_array($callable) ) {
+            list($object, $method) = $callable;
+            $callable = $method;
+        }
+        foreach ($callable->getParameters() as $parameter) {
+            if ( $parameter->getName() == 'server' ) {
+                return true;
+            }
+        }
+        return false;
     }
 }
