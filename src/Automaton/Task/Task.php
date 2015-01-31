@@ -15,7 +15,7 @@ class Task extends AbstractTask implements ExecutableTaskInterface
     }
 
     /**
-     * @return \ReflectionFunction|\ReflectionMethod
+     * @return \ReflectionFunction|\ReflectionMethod|array
      */
     public function getCallable()
     {

@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Application extends BaseApplication
 {
@@ -41,6 +42,7 @@ class Application extends BaseApplication
     {
         $this->container = $this->configuration->load($input->getParameterOption(array('--config', '-c'), 'automaton.yml'), $this->stopwatch, $input->hasParameterOption(array('--profile')));
 
+        /** @var EventDispatcherInterface $eventDispatcher */
         $eventDispatcher = $this->container->get('event_dispatcher');
 
         $this->setDispatcher($eventDispatcher);

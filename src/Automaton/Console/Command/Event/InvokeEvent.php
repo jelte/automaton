@@ -10,31 +10,17 @@ use Automaton\Task\Task;
 use Automaton\Task\TaskInterface;
 use Symfony\Component\EventDispatcher\Event;
 
-class InvokeEvent extends Event
+class InvokeEvent extends TaskEvent
 {
     /**
      * @var ExecutableTaskInterface
      */
     protected $task;
 
-    /**
-     * @var RuntimeEnvironment
-     */
-    protected $runtimeEnvironment;
-
 
     public function __construct(ExecutableTaskInterface $task, RuntimeEnvironment $runtimeEnvironment)
     {
-        $this->task = $task;
-        $this->runtimeEnvironment = $runtimeEnvironment;
-    }
-
-    /**
-     * @return ExecutableTaskInterface
-     */
-    public function getTask()
-    {
-        return $this->task;
+        parent::__construct($task, $runtimeEnvironment);
     }
 
     /**
@@ -43,13 +29,5 @@ class InvokeEvent extends Event
     public function getCallable()
     {
         return $this->task->getCallable();
-    }
-
-    /**
-     * @return RuntimeEnvironment
-     */
-    public function getRuntimeEnvironment()
-    {
-        return $this->runtimeEnvironment;
     }
 }

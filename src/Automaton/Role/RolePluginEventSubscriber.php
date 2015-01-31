@@ -44,7 +44,7 @@ class RolePluginEventSubscriber extends AbstractPluginEventSubscriber
         $environment = $event->getRuntimeEnvironment();
         $input = $environment->getInput();
         if ($role = $input->getOption('role')) {
-            $environment->set('role', $input->getOption('role'));
+            $environment->set('role', $role);
         }
     }
 
@@ -56,7 +56,7 @@ class RolePluginEventSubscriber extends AbstractPluginEventSubscriber
         $environment = $invokeEvent->getRuntimeEnvironment();
         $task = $invokeEvent->getTask();
         $server = $environment->get('server');
-
+        
        // $invokeEvent->stopPropagation();
     }
 }

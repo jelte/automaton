@@ -10,7 +10,12 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    protected $name = 'automaton';
+    protected $name;
+
+    public function __construct($name = 'automaton')
+    {
+        $this->name = $name;
+    }
 
     /**
      * Generates the configuration tree builder.

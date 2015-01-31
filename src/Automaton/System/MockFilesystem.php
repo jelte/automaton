@@ -15,8 +15,28 @@ class MockFilesystem implements FilesystemInterface
         $this->output = $output;
     }
 
+    public function remove($dirs)
+    {
+        $this->output->writeln(sprintf('%s(%s)',__FUNCTION__,$dirs));
+    }
+
+    public function mirror($originDir, $targetDir, \Traversable $iterator = null, $options = array())
+    {
+        $this->output->writeln(sprintf('%s(%s, %s)',__FUNCTION__,$originDir, $targetDir));
+    }
+
     public function __call($name, $arguments)
     {
         $this->output->writeln(sprintf('%s',$name));
+    }
+
+    public function exists($path)
+    {
+        $this->output->writeln(sprintf('%s(%s)',__FUNCTION__,$path));
+    }
+
+    public function mkdir($dirs, $mode = 0777)
+    {
+        $this->output->writeln(sprintf('%s(%s, %s)',__FUNCTION__, $dirs, $mode));
     }
 }
