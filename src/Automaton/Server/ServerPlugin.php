@@ -36,13 +36,10 @@ class ServerPlugin extends AbstractPlugin
         switch ($config['auth']) {
             case 'publicKeyFile':
                 return $this->createIdRSA($config);
-                break;
             case 'pem':
                 return $this->createPem($config);
-                break;
             case 'password':
                 return $this->createPassword($config);
-                break;
         }
     }
 
