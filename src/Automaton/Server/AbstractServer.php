@@ -27,7 +27,7 @@ abstract class AbstractServer implements ServerInterface
     /**
      * @var OutputInterface
      */
-    private $output;
+    protected $output;
 
     public function __construct($name, ConnectionInterface $connection, $root = null)
     {

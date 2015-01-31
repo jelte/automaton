@@ -41,33 +41,28 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
 
     public function preInvoke(TaskEvent $taskEvent)
     {
-        $task = $taskEvent->getTask();
-        $runtimeEnvironment = $taskEvent->getRuntimeEnvironment();
-        $output = $runtimeEnvironment->getOutput();
-        if ($task->showProgress() && null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
-            $runtimeEnvironment->getOutput()->write(str_pad($task->getName(), 40, '.'));
-        }
+        $this->debug($taskEvent, str_pad($taskEvent->getTask()->getName(), 40, '.'));
     }
 
     public function postInvoke(TaskEvent $taskEvent)
     {
-        $task = $taskEvent->getTask();
-        $runtimeEnvironment = $taskEvent->getRuntimeEnvironment();
-        $output = $runtimeEnvironment->getOutput();
-        if ($task->showProgress() && null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
-            $runtimeEnvironment->getOutput()->writeln("<info>✔</info>");
-        }
+        $this->debug($taskEvent, "<info>✔</info>");
     }
 
     public function rollback(TaskEvent $taskEvent)
+    {
+        $this->debug($taskEvent, "<error>x</error>");
+        $this->onRun(new TaskEvent($this->plugin->get('rollback'), $taskEvent->getRuntimeEnvironment()));
+    }
+
+    protected function debug(TaskEvent $taskEvent, $message)
     {
         $task = $taskEvent->getTask();
         $runtimeEnvironment = $taskEvent->getRuntimeEnvironment();
         $output = $runtimeEnvironment->getOutput();
         if ($task->showProgress() && null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
-            $runtimeEnvironment->getOutput()->writeln("<error>x</error>");
+            $runtimeEnvironment->getOutput()->writeln($message);
         }
-        $this->onRun(new TaskEvent($this->plugin->get('rollback'), $runtimeEnvironment));
     }
 
     public function onRun(TaskEvent $taskEvent)

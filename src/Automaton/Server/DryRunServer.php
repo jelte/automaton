@@ -13,11 +13,6 @@ class DryRunServer extends AbstractServer
      */
     private $server;
 
-    /**
-     * @var OutputInterface
-     */
-    private $output;
-
     public function __construct(ServerInterface $server, OutputInterface $output)
     {
         $this->server = $server;
@@ -27,19 +22,6 @@ class DryRunServer extends AbstractServer
     public function getName()
     {
         return $this->server->getName();
-    }
-
-    public function getUri()
-    {
-        return $this->server->getUri();
-    }
-
-    public function privateKey($privateKey)
-    {
-    }
-
-    public function passPhrase($passPhrase)
-    {
     }
 
     public function cwd($path)
