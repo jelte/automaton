@@ -41,7 +41,7 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
 
     public function preInvoke(TaskEvent $taskEvent)
     {
-        $this->debug($taskEvent, str_pad($taskEvent->getTask()->getName(), 40, '.'));
+        $this->debug($taskEvent, str_pad($taskEvent->getTask()->getName(), 40, '.'), false);
     }
 
     public function postInvoke(TaskEvent $taskEvent)
@@ -55,13 +55,13 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
         $this->onRun(new TaskEvent($this->plugin->get('rollback'), $taskEvent->getRuntimeEnvironment()));
     }
 
-    protected function debug(TaskEvent $taskEvent, $message)
+    protected function debug(TaskEvent $taskEvent, $message, $newLine = true)
     {
         $task = $taskEvent->getTask();
         $runtimeEnvironment = $taskEvent->getRuntimeEnvironment();
         $output = $runtimeEnvironment->getOutput();
         if ($task->showProgress() && null !== $output && $output->getVerbosity() !== OutputInterface::VERBOSITY_DEBUG) {
-            $runtimeEnvironment->getOutput()->writeln($message);
+            $newLine ? $runtimeEnvironment->getOutput()->writeln($message) : $runtimeEnvironment->getOutput()->write($message);
         }
     }
 
@@ -75,7 +75,7 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
                 $this->eventDispatcher->dispatch('automaton.task.pre_invoke', new TaskEvent($task, $runtimeEnvironment));
                 $this->eventDispatcher->dispatch('automaton.task.invoke', new TaskEvent($task, $runtimeEnvironment));
                 $this->eventDispatcher->dispatch('automaton.task.post_invoke', new TaskEvent($task, $runtimeEnvironment));
-            } catch ( \RuntimeException $e ) {
+            } catch (\RuntimeException $e) {
                 $this->eventDispatcher->dispatch('automaton.task.rollback', new TaskEvent($task, $runtimeEnvironment));
                 throw $e;
             }
@@ -94,12 +94,12 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
         $this->eventDispatcher->dispatch('automaton.task.do_invoke', new InvokeEvent($taskEvent->getTask(), $taskEvent->getRuntimeEnvironment()));
     }
 
-    public  function doInvoke(InvokeEvent $invokeEvent)
+    public function doInvoke(InvokeEvent $invokeEvent)
     {
         $callable = $invokeEvent->getCallable();
         $runtimeEnvironment = $invokeEvent->getRuntimeEnvironment();
         $object = null;
-        if ( is_array($callable) ) {
+        if (is_array($callable)) {
             list($object, $method) = $callable;
             $callable = $method;
         }
@@ -123,7 +123,7 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
     protected function before(TaskInterface $task, RuntimeEnvironment $runtimeEnvironment)
     {
         foreach ($task->getBefore() as $before) {
-            foreach ( $before as $task ) {
+            foreach ($before as $task) {
                 $this->onRun(new TaskEvent($task, $runtimeEnvironment));
             }
         }
@@ -132,7 +132,7 @@ class TaskPluginEventSubscriber extends AbstractPluginEventSubscriber
     protected function after(TaskInterface $task, RuntimeEnvironment $runtimeEnvironment)
     {
         foreach ($task->getAfter() as $after) {
-            foreach ( $after as $task ) {
+            foreach ($after as $task) {
                 $this->onRun(new TaskEvent($task, $runtimeEnvironment));
             }
         }

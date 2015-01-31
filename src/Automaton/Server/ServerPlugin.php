@@ -20,40 +20,23 @@ class ServerPlugin extends AbstractPlugin
     {
         if ( !isset($config['auth']) ) $config['auth'] = null;
         if ( !isset($config['username'])) $config['username'] = null;
-        $hops = array_key_exists('gateways', $config) ? $config['gateways'] : array();
-        if ( isset($config['type']) && $config['type'] == 'ssh2-automaton' ) {
-            $session = new Session($config['host'],
-                array_key_exists('arguments', $config) ? $config['arguments'] : array(),
-                array_key_exists('options', $config) ? $config['options'] : array(),
-                new Tunnel($hops)
-            );
-            $connection = new SshConnection($session);
-            if (isset($config['auth']) && method_exists($session, $config['auth'])) {
-                $method = new \ReflectionMethod($session, $config['auth']);
-                $parameters = array();
-                foreach ($method->getParameters() as $parameter) {
-                    $parameters[$parameter->getName()] = array_key_exists($parameter->getName(), $config) ? $config[$parameter->getName()] : null;
-                }
-                $method->invokeArgs($session, $parameters);
-            }
-        } else {
-            $session = new \Net_SFTP($config['host'], isset($config['options']['PORT'])?$config['options']['PORT']:22);
-            if ($config['auth'] == 'publicKeyFile') {
-                $key = new \Crypt_RSA();
+        $session = new \Net_SFTP($config['host'], isset($config['options']['PORT'])?$config['options']['PORT']:22);
+        $key = in_array($config['auth'], array('publicKeyFile', 'pem')) ? $key = new \Crypt_RSA() : null;
+        switch ( $config['auth'] ) {
+            case 'publicKeyFile':
                 $key->setPassword(isset($config['passphrase'])?$config['passphrase']:null);
                 $key->loadKey(file_get_contents(isset($config['privateKeyFile'])?$config['privateKeyFile']:getenv("HOME").'/.ssh/id_rsa'));
-                $session->login($config['username'], $key);
-            } elseif ($config['auth'] == 'password') {
-                $session->login($config['username'], $config['password']);
-            } elseif ($config['auth'] == 'pem') {
-                $key = new \Crypt_RSA();
+                break;
+            case 'pem':
                 $key->loadKey(file_get_contents($config['pemFile']));
-                $session->login($config['username'], $key);
-            } else {
-                $session->login($config['username']);
-            }
-            $connection = new PhpSecLibConnection($session);
+                break;
+            case 'password':
+                $key = $config['password'];
+                break;
         }
+
+        $session->login($config['username'], $key);
+        $connection = new PhpSecLibConnection($session);
         return $this->registerInstance($name, new SshServer($name, $connection, array_key_exists('path', $config) ? $config['path'] : null));
     }
 }
