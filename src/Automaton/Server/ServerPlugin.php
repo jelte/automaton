@@ -18,25 +18,51 @@ class ServerPlugin extends AbstractPlugin
      */
     public function server($name, array $config)
     {
-        if ( !isset($config['auth']) ) $config['auth'] = null;
-        if ( !isset($config['username'])) $config['username'] = null;
-        $session = new \Net_SFTP($config['host'], isset($config['options']['PORT'])?$config['options']['PORT']:22);
-        $key = in_array($config['auth'], array('publicKeyFile', 'pem')) ? $key = new \Crypt_RSA() : null;
-        switch ( $config['auth'] ) {
+        return $this->registerInstance($name, new SshServer($name, new PhpSecLibConnection($this->createSession($config)), array_key_exists('path', $config) ? $config['path'] : null));
+    }
+
+    protected function createSession(array $config)
+    {
+        if (!isset($config['username'])) $config['username'] = null;
+        $session = new \Net_SFTP($config['host'], isset($config['options']['port']) ? $config['options']['port'] : 22);
+        $session->login($config['username'], $this->createKey($config));
+        return $session;
+    }
+
+    protected function createKey(array $config)
+    {
+        if (!isset($config['auth'])) $config['auth'] = null;
+
+        switch ($config['auth']) {
             case 'publicKeyFile':
-                $key->setPassword(isset($config['passphrase'])?$config['passphrase']:null);
-                $key->loadKey(file_get_contents(isset($config['privateKeyFile'])?$config['privateKeyFile']:getenv("HOME").'/.ssh/id_rsa'));
+                return $this->createIdRSA($config);
                 break;
             case 'pem':
-                $key->loadKey(file_get_contents($config['pemFile']));
+                return $this->createPem($config);
                 break;
             case 'password':
-                $key = $config['password'];
+                return $this->createPassword($config);
                 break;
         }
+    }
 
-        $session->login($config['username'], $key);
-        $connection = new PhpSecLibConnection($session);
-        return $this->registerInstance($name, new SshServer($name, $connection, array_key_exists('path', $config) ? $config['path'] : null));
+    protected function createPem(array $config)
+    {
+        $key = new \Crypt_RSA();
+        $key->loadKey(file_get_contents($config['pemFile']));
+        return $key;
+    }
+
+    protected function createIdRSA(array $config)
+    {
+        $key = new \Crypt_RSA();
+        $key->setPassword(isset($config['passphrase']) ? $config['passphrase'] : null);
+        $key->loadKey(file_get_contents(isset($config['privateKeyFile']) ? $config['privateKeyFile'] : getenv("HOME") . '/.ssh/id_rsa'));
+        return $key;
+    }
+
+    protected function createPassword(array $config)
+    {
+        return isset($config['password']) ? $config['password'] : null;
     }
 }

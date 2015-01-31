@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jeltesteijaert
- * Date: 31/01/15
- * Time: 18:12
- */
 
 namespace Automaton\Resources\Recipes\Symfony;
 
