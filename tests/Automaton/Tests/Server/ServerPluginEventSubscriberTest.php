@@ -6,8 +6,11 @@ namespace Automaton\Tests\Server;
 
 use Automaton\RuntimeEnvironment;
 use Automaton\Server\ServerPluginEventSubscriber;
+use Prophecy\PhpUnit\ProphecyTestCase;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
-class ServerPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
+class ServerPluginEventSubscriberTest extends ProphecyTestCase
 {
     protected $plugin, $eventDispatcher, $input, $output, $task, $taskEvent, $runtimeEnvironment;
 
@@ -18,12 +21,13 @@ class ServerPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        parent::setUp();
         $this->plugin = $this->getMock('Automaton\Server\ServerPlugin');
         $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $this->task = $this->getMock('Automaton\Task\TaskInterface');
         $this->input = $this->getMock('Symfony\Component\Console\Input\InputInterface');
         $this->output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
-        $this->runtimeEnvironment = $this->getMock('Automaton\RuntimeEnvironment', array(), array($this->input, $this->output));
+        $this->runtimeEnvironment = $this->getMock('Automaton\RuntimeEnvironment', array(), array($this->input, $this->output, new ParameterBag(), new HelperSet()));
         $this->taskEvent = $this->getMock('Automaton\Console\Command\Event\TaskEvent', array(), array($this->task, $this->runtimeEnvironment));
 
         $this->subscriber = new ServerPluginEventSubscriber($this->plugin, $this->eventDispatcher);
@@ -89,7 +93,7 @@ class ServerPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function convertsServersToDryRunOnPreRun()
     {
-        $env = new RuntimeEnvironment($this->input, $this->output);
+        $env = new RuntimeEnvironment($this->input, $this->output, new ParameterBag(), new HelperSet());
         $servers = array('server-1' => $this->getMock('Automaton\Server\ServerInterface'), 'server-2' => $this->getMock('Automaton\Server\ServerInterface'));
         $keys = array_keys($servers);
         $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($env);

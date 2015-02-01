@@ -5,6 +5,8 @@ namespace Automaton\Tests\Stage;
 
 use Automaton\Stage\StagePluginEventSubscriber;
 use Automaton\Task\TaskPluginEventSubscriber;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +26,7 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $this->input = $this->getMock('Symfony\Component\Console\Input\InputInterface');
         $this->output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
-        $this->runtimeEnvironment = $this->getMock('Automaton\RuntimeEnvironment', array(), array($this->input, $this->output));
+        $this->runtimeEnvironment = $this->getMock('Automaton\RuntimeEnvironment', array(), array($this->input, $this->output, new ParameterBag(), new HelperSet()));
         $this->taskEvent = $this->getMock('Automaton\Console\Command\Event\TaskEvent', array(), array($this->task, $this->runtimeEnvironment));
 
         $this->subscriber = new TaskPluginEventSubscriber($this->plugin, $this->eventDispatcher );

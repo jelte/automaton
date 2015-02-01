@@ -5,8 +5,12 @@ namespace Automaton\Tests\Console\Command;
 
 
 use Automaton\Console\Command\RunTaskCommand;
+use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTestCase;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
-class RunTaskCommandTest extends \PHPUnit_Framework_TestCase
+class RunTaskCommandTest extends ProphecyTestCase
 {
     protected $task;
 
@@ -16,6 +20,8 @@ class RunTaskCommandTest extends \PHPUnit_Framework_TestCase
 
     protected $output;
 
+    protected $helperSet;
+
     /**
      * @var RunTaskCommand
      */
@@ -23,14 +29,17 @@ class RunTaskCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->task = $this->getMock('Automaton\Task\TaskInterface');
-        $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $this->task->expects($this->once())->method('getName')->willReturn('debug');
+        parent::setUp();
+        $this->task = $this->prophesize('Automaton\Task\TaskInterface');
+        $this->eventDispatcher = $this->prophesize('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->task->getName()->willReturn('debug');
 
-        $this->input = $this->getMock('Symfony\Component\Console\Input\InputInterface');
-        $this->output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $this->input = $this->prophesize('Symfony\Component\Console\Input\InputInterface');
+        $this->output = $this->prophesize('Symfony\Component\Console\Output\OutputInterface');
+        $this->helperSet = $this->prophesize('Symfony\Component\Console\Helper\HelperSet');
 
-        $this->command = new RunTaskCommand($this->task, $this->eventDispatcher);
+        $this->command = new RunTaskCommand($this->task->reveal(), $this->eventDispatcher->reveal(), new ParameterBag());
+        $this->command->setHelperSet($this->helperSet->reveal());
     }
 
     /**
@@ -46,12 +55,12 @@ class RunTaskCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function canBeExecuted()
     {
-        $this->eventDispatcher->expects($this->exactly(3))->method('dispatch')->withConsecutive(
-            array($this->equalTo('automaton.task.pre_run')),
-            array($this->equalTo('automaton.task.run')),
-            array($this->equalTo('automaton.task.post_run'))
-        );
+        $this->eventDispatcher->dispatch('automaton.task.pre_run', Argument::type('Automaton\Console\Command\Event\TaskEvent'))->shouldBeCalled();
+        $this->eventDispatcher->dispatch('automaton.task.run', Argument::type('Automaton\Console\Command\Event\TaskEvent'))->shouldBeCalled();
+        $this->eventDispatcher->dispatch('automaton.task.post_run', Argument::type('Automaton\Console\Command\Event\TaskEvent'))->shouldBeCalled();
 
-        $this->command->run($this->input, $this->output);
+        $this->command->run($this->input->reveal(), $this->output->reveal());
+
+        $this->assertTrue(true);
     }
 } 
