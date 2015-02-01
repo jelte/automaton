@@ -4,6 +4,9 @@
 namespace Automaton\Server;
 
 
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Output\OutputInterface;
+
 class SshServer extends AbstractServer
 {
     /**
@@ -13,6 +16,15 @@ class SshServer extends AbstractServer
     {
         $this->debug($command);
         return $this->connection->run($command);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function runInteractively($command, $inputLine, $endline, OutputInterface $output, HelperSet $helperSet)
+    {
+        $this->debug($command);
+        return $this->connection->runInteractively($command, $inputLine, $endline, $output, $helperSet);
     }
 
     /**

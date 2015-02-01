@@ -4,8 +4,12 @@
 namespace Automaton;
 
 
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class RuntimeEnvironment
 {
@@ -19,12 +23,17 @@ class RuntimeEnvironment
      */
     protected $output;
 
-    public function __construct(InputInterface $input, OutputInterface $output)
+    protected $parameterBag;
+
+    public function __construct(InputInterface $input, OutputInterface $output, ParameterBagInterface $parameterBag, HelperSet $helperSet)
     {
         $this->set('input', $input);
         $this->set('output', $output);
         $this->set('runtimeEnvironment', $this);
         $this->set('env', $this);
+        $this->set('helperSet', $helperSet);
+        $this->parameterBag = $parameterBag;
+
     }
 
     /**
@@ -39,7 +48,7 @@ class RuntimeEnvironment
 
     public function get($name, $default = null)
     {
-        return isset($this->values[$name]) ? $this->values[$name] : $default;
+        return isset($this->values[$name]) ? $this->values[$name] : ($this->parameterBag->has($name) ? $this->parameterBag->get($name) : $default);
     }
 
     /**

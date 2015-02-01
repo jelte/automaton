@@ -3,6 +3,10 @@
 
 namespace Automaton\Server\Ssh;
 
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
 class PhpSeclibConnection implements ConnectionInterface
 {
     /**
@@ -26,6 +30,25 @@ class PhpSeclibConnection implements ConnectionInterface
         }
 
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function runInteractively($command, $inputLine, $endline, OutputInterface $output, HelperSet $helperSet)
+    {
+        $this->session->write($command . "\n");
+        while ($outp = $this->session->read("#({$inputLine})|({$endline})#", NET_SSH2_READ_REGEX)) {
+            if ( preg_match("#{$endline}#", $outp) ) break;
+            $answer = $helperSet->get('dialog')->ask($output, $outp);
+            $this->session->write($answer."\n");
+        }
+
+        if ($this->session->getStdError()) {
+            throw new \RuntimeException($this->session->getStdError());
+        }
+
+        return true;
     }
 
     /**

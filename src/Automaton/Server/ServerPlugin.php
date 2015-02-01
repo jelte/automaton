@@ -34,6 +34,8 @@ class ServerPlugin extends AbstractPlugin
         if (!isset($config['auth'])) $config['auth'] = null;
 
         switch ($config['auth']) {
+            case 'agent':
+                return new \System_SSH_Agent();
             case 'publicKeyFile':
                 return $this->createIdRSA($config);
             case 'pem':

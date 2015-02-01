@@ -43,7 +43,7 @@ class RecipePluginEventSubscriber extends AbstractPluginEventSubscriber
             foreach ($recipe->tasks() as $task) {
                 call_user_func_array(array($automaton, 'task'), array($task->getName(), $task));
                 if ($task->isPublic()) {
-                    $application->add(new RunTaskCommand($task, $eventDispatcher));
+                    $application->add(new RunTaskCommand($task, $eventDispatcher, $application->getContainer()->getParameterBag()));
                 }
             }
             foreach ($recipe->befores() as $before) {

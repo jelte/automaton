@@ -26,6 +26,7 @@ class Source
         $release = date('YmdHis');
         $env->set('release', $release);
         $target = $source . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $release;
+        $env->set('release.path', "releases/{$release}");
         $env->set('deploy.local_path', $target);
         if ($filesystem->exists($target)) {
             $filesystem->remove($target);

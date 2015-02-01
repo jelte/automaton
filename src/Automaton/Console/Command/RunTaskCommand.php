@@ -11,6 +11,8 @@ use Automaton\Task\TaskInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RunTaskCommand extends Command
@@ -25,10 +27,14 @@ class RunTaskCommand extends Command
      */
     protected $eventDispatcher;
 
-    public function __construct(TaskInterface $task, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        TaskInterface $task,
+        EventDispatcherInterface $eventDispatcher,
+        ParameterBagInterface $parameterBag
+    ) {
         $this->task = $task;
         $this->eventDispatcher = $eventDispatcher;
+        $this->parameterBag = $parameterBag;
         parent::__construct($task->getName());
     }
 
@@ -44,7 +50,7 @@ class RunTaskCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $runtimeEnvironment = new RuntimeEnvironment($input, $output);
+        $runtimeEnvironment = new RuntimeEnvironment($input, $output, $this->parameterBag, $this->getHelperSet());
 
         $this->eventDispatcher->dispatch('automaton.task.pre_run', new TaskEvent($this->task, $runtimeEnvironment));
 

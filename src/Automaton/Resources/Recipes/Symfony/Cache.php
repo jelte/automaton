@@ -11,12 +11,20 @@ class Cache
 
     /**
      * @Automaton\Task(description="Warm up Symfony cache")
-     * @Automaton\After(task="composer:install")
+     * @Automaton\Before(task="environment:createSymlink")
      */
     public function warmup(RuntimeEnvironment $env, ServerInterface $server)
     {
-        $stage = $env->get('stage')->getName();
-        $server->run("php app/console --env={$stage} -v cache:warmup");
+        $server->run("php {$server->cwd('releases/'. $env->get('release').'/app/console')} --env={$env->get('symfony.stage')} -v cache:warmup");
+    }
+
+    /**
+     * @Automaton\Task(description="Build Symfony bootstrap cache")
+     * @Automaton\Before(task="symfony:cache:warmup", priority=99)
+     */
+    public function build_bootstrap(RuntimeEnvironment $env, ServerInterface $server)
+    {
+        $server->run("php {$server->cwd('releases/'. $env->get('release').'/vendor/sensio/distribution-bundle/Sensio/Bundle/DistributionBundle/Resources/bin/build_bootstrap.php')}");
     }
 
 }
