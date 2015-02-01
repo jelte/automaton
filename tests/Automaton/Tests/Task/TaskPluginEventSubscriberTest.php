@@ -37,9 +37,6 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function runnable()
     {
-        $this->markTestIncomplete(
-            'This test needs refactoring.'
-        );
         $this->taskEvent->expects($this->once())->method('getTask')->willReturn($this->createSimpleTask());
         $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
         $this->subscriber->onRun($this->taskEvent);
@@ -56,44 +53,8 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function invokesMethodsWithParams()
-    {
-        $this->markTestIncomplete(
-            'This test needs refactoring.'
-        );
-        $task = $this->getMock('Automaton\Task\ExecutableTaskInterface');
-        $method = $this->getMock('\ReflectionMethod', array(), array(), '', false);
-
-
-        $serverParam = $this->getMock('\ReflectionParameter', array(), array(), '', false);
-        $serverParam->expects($this->once())->method('getName')->willReturn('server');
-        $serverParam->expects($this->once())->method('allowsNull')->willReturn(true);
-        $inputParam = $this->getMock('\ReflectionParameter', array(), array(), '', false);
-        $inputParam->expects($this->once())->method('getName')->willReturn('input');
-        $inputParam->expects($this->once())->method('allowsNull')->willReturn(true);
-        $outputParam = $this->getMock('\ReflectionParameter', array(), array(), '', false);
-        $outputParam->expects($this->once())->method('getName')->willReturn('output');
-        $outputParam->expects($this->once())->method('allowsNull')->willReturn(true);
-        $method->expects($this->once())->method('getParameters')->willReturn(array(
-            $serverParam, $inputParam, $outputParam
-        ));
-        $task->expects($this->once())->method('getCallable')->willReturn($method);
-        $task->expects($this->once())->method('getBefore')->willReturn(array());
-        $task->expects($this->once())->method('getAfter')->willReturn(array());
-
-        $this->taskEvent->expects($this->once())->method('getTask')->willReturn($task);
-        $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
-        $this->subscriber->onRun($this->taskEvent);
-    }
-
-    /**
-     * @test
-     */
     public function runsTasksBefore()
     {
-        $this->markTestIncomplete(
-            'This test needs refactoring.'
-        );
         $this->taskEvent->expects($this->once())->method('getTask')->willReturn($this->createSimpleTask(array(array($this->createSimpleTask()))));
         $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
         $this->subscriber->onRun($this->taskEvent);
@@ -104,9 +65,6 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function runsTasksAfter()
     {
-        $this->markTestIncomplete(
-            'This test needs refactoring.'
-        );
         $this->taskEvent->expects($this->once())->method('getTask')->willReturn($this->createSimpleTask(array(),array(array($this->createSimpleTask()))));
         $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
         $this->subscriber->onRun($this->taskEvent);
@@ -118,9 +76,6 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function doesRunGroupTask()
     {
-        $this->markTestIncomplete(
-            'This test needs refactoring.'
-        );
         $groupTask = $this->getMock('Automaton\Task\GroupTaskInterface', array(), array());
         $groupTask->expects($this->once())->method('getTasks')->willReturn(array($this->createSimpleTask(), $this->createSimpleTask()));
         $groupTask->expects($this->once())->method('getBefore')->willReturn(array(array($this->createSimpleTask())));
@@ -136,9 +91,6 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function doesRunAlias()
     {
-        $this->markTestIncomplete(
-            'This test needs refactoring.'
-        );
         $alias = $this->getMock('Automaton\Task\AliasInterface', array(), array());
         $alias->expects($this->once())->method('getOriginal')->willReturn($this->createSimpleTask());
         $alias->expects($this->once())->method('getBefore')->willReturn(array(array($this->createSimpleTask())));
@@ -152,11 +104,7 @@ class TaskPluginEventSubscriberTest extends \PHPUnit_Framework_TestCase
     private function createSimpleTask(array $before = array(), array $after = array(), $executes = true)
     {
         $task = $this->getMock('Automaton\Task\ExecutableTaskInterface');
-        if ( $executes ) {
-            $method = $this->getMock('\ReflectionMethod', array(), array(), '', false);
-            $method->expects($this->once())->method('getParameters')->willReturn(array());
-            $task->expects($this->once())->method('getCallable')->willReturn($method);
-        }
+
         $task->expects($this->once())->method('getBefore')->willReturn($before);
         $task->expects($this->once())->method('getAfter')->willReturn($after);
 

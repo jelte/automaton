@@ -27,6 +27,11 @@ class RunTaskCommand extends Command
      */
     protected $eventDispatcher;
 
+    /**
+     * @var ParameterBagInterface
+     */
+    protected $parameterBag;
+
     public function __construct(
         TaskInterface $task,
         EventDispatcherInterface $eventDispatcher,

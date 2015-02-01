@@ -10,6 +10,11 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class StagePluginEventSubscriber extends AbstractPluginEventSubscriber
 {
+    /**
+     * @var StagePlugin
+     */
+    protected $plugin;
+
     public function __construct(StagePlugin $plugin)
     {
         parent::__construct($plugin);

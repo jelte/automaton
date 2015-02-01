@@ -15,9 +15,6 @@ class ServerPluginTest extends \PHPUnit_Framework_TestCase
     {
         $plugin = new ServerPlugin();
 
-        //$this->assertInstanceOf('Automaton\Server\SshServer', $plugin->server('test', array('host' => 'www.khepri.be')));
-        $this->markTestIncomplete(
-            'This test needs refactoring.'
-        );
+        $this->assertInstanceOf('Automaton\Server\SshServer', $plugin->server('test', array('host' => 'www.khepri.be')));
     }
 }

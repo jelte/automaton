@@ -5,6 +5,7 @@ namespace Automaton\Server;
 
 
 use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 interface ServerInterface {
@@ -12,7 +13,7 @@ interface ServerInterface {
 
     public function run($command);
 
-    public function runInteractively($command, $inputLine, $lastLine, OutputInterface $output, HelperSet $helperSet);
+    public function runInteractively($command, $inputLine, $lastLine, InputInterface $input, OutputInterface $output, HelperSet $helperSet);
 
     public function cwd($path);
 

@@ -25,7 +25,7 @@ class RuntimeEnvironment
 
     protected $parameterBag;
 
-    public function __construct(InputInterface $input, OutputInterface $output, ParameterBagInterface $parameterBag, HelperSet $helperSet)
+    public function __construct(InputInterface $input, OutputInterface $output, ParameterBagInterface $parameterBag, HelperSet $helperSet = null)
     {
         $this->set('input', $input);
         $this->set('output', $output);

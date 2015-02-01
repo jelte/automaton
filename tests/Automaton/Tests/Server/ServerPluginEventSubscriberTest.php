@@ -4,11 +4,13 @@
 namespace Automaton\Tests\Server;
 
 
+use Automaton\Console\Command\Event\TaskEvent;
 use Automaton\RuntimeEnvironment;
 use Automaton\Server\ServerPluginEventSubscriber;
 use Prophecy\PhpUnit\ProphecyTestCase;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Automaton\Task\ExecutableTaskInterface;
 
 class ServerPluginEventSubscriberTest extends ProphecyTestCase
 {
@@ -114,18 +116,22 @@ class ServerPluginEventSubscriberTest extends ProphecyTestCase
      */
     public function runsTaskForEachServerOnRun()
     {
-        $this->markTestIncomplete(
-            'This test needs refactoring.'
-        );
         $servers = array('server-1' => null, 'server-2' => null);
-        $this->taskEvent->expects($this->once())->method('getTask')->willReturn($this->task);
-        $this->runtimeEnvironment->expects($this->once())->method('get')->with('servers', array())->willReturn($servers);
+        $task = $this->prophesize('Automaton\Task\ExecutableTaskInterface');
+        $method = $this->prophesize('ReflectionMethod');
+        $serverParam = $this->prophesize('ReflectionParameter');
+
+
+        $this->taskEvent->expects($this->once())->method('getTask')->willReturn($task->reveal());
         $this->taskEvent->expects($this->once())->method('getRuntimeEnvironment')->willReturn($this->runtimeEnvironment);
+        $task->getCallable()->willReturn($method->reveal());
+        $method->getParameters()->willReturn(array($serverParam->reveal()));
+        $serverParam->getName()->willReturn('server');
 
-        $this->eventDispatcher->expects($this->exactly(count($servers)))->method('dispatch')->with('automaton.task.invoke');
-
+        $this->runtimeEnvironment->expects($this->once())->method('get')->with('servers', array())->willReturn($servers);
+        $this->eventDispatcher->expects($this->exactly(count($servers)))->method('dispatch')->with('automaton.task.do_invoke');
         $this->taskEvent->expects($this->once())->method('stopPropagation');
 
-        $this->subscriber->onRun($this->taskEvent);
+        $this->subscriber->onInvoke($this->taskEvent);
     }
 }

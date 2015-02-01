@@ -5,6 +5,7 @@ namespace Automaton\Server;
 
 
 use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class DryRunServer extends AbstractServer
@@ -46,7 +47,7 @@ class DryRunServer extends AbstractServer
         $this->output->writeln(sprintf('[%s] upload(%s, %s)', $this->server->getName(), $local, $remote));
     }
 
-    public function runInteractively($command, $inputLine, $lastLine, OutputInterface $output, HelperSet $helperSet)
+    public function runInteractively($command, $inputLine, $lastLine, InputInterface $input, OutputInterface $output, HelperSet $helperSet)
     {
         $this->output->writeln(sprintf('[%s] runInteractively(%s)', $this->server->getName(), $command));
     }

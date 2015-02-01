@@ -88,7 +88,7 @@ class ServerPluginEventSubscriber extends AbstractPluginEventSubscriber
     protected function hasServerParameter($callable)
     {
         if ( is_array($callable) ) {
-            list($object, $method) = $callable;
+            list(, $method) = $callable;
             $callable = $method;
         }
         foreach ($callable->getParameters() as $parameter) {
