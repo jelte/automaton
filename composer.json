@@ -1,5 +1,5 @@
 {
-    "name": "jelte/php-automoton",
+    "name": "jelte/automoton",
     "description": "More than just a Deployment Tool",
     "license": "MIT",
     "authors": [
@@ -14,12 +14,12 @@
         }
     },
     "bin": [
-        "bin/dep"
+        "bin/automaton"
     ],
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/jelte/automaton-ssh.git"
+            "url": "https://github.com/jelte/automaton-recipes.git"
         }
     ],
     "require": {
@@ -33,7 +33,8 @@
         "symfony/console": "~2.5",
         "phpseclib/phpseclib": "0.3.*@dev",
         "symfony/process": "~2.5",
-        "symfony/stopwatch": "~2.5"
+        "symfony/stopwatch": "~2.5",
+        "jelte/automaton-recipes": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.2",

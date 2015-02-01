@@ -6,6 +6,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
     'Automaton\Recipe\Annotation',
     dirname(__DIR__).'/src'
 );
+
 $application = new \Automaton\Console\Application('Automaton', '0.1.0');
 $application->run();
 
