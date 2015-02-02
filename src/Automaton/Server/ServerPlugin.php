@@ -4,10 +4,7 @@
 namespace Automaton\Server;
 
 use Automaton\Plugin\AbstractPlugin;
-use Automaton\Server\Ssh\PhpSecLibConnection;
-use Automaton\Server\Ssh\SshConnection;
-use Automaton\Ssh2\Session;
-use Automaton\Ssh2\Tunnel;
+use Automaton\Server\Ssh\PhpSeclibConnection;
 
 class ServerPlugin extends AbstractPlugin
 {
@@ -18,7 +15,7 @@ class ServerPlugin extends AbstractPlugin
      */
     public function server($name, array $config)
     {
-        return $this->registerInstance($name, new SshServer($name, new PhpSecLibConnection($this->createSession($config)), array_key_exists('path', $config) ? $config['path'] : null));
+        return $this->registerInstance($name, new SshServer($name, new PhpSeclibConnection($this->createSession($config)), array_key_exists('path', $config) ? $config['path'] : null));
     }
 
     protected function createSession(array $config)
