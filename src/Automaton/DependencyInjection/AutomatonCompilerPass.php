@@ -46,7 +46,6 @@ class AutomatonCompilerPass implements CompilerPassInterface
 
         $config = $this->processor->processConfiguration($this->configuration, $container->getExtensionConfig($this->name));
 
-        $reflectionClass = null;
         foreach ($config as $method => $plugin) {
             if ($container->hasDefinition($this->name . '.plugin.' . $method)) {
                 $definition->addMethodCall('plugin', array(new Reference($this->name . '.plugin.' . $method)));
@@ -65,15 +64,15 @@ class AutomatonCompilerPass implements CompilerPassInterface
     protected function processPlugin($method, $plugin, Definition $definition, Definition $pluginDefinition)
     {
         $reflectionClass = new \ReflectionClass($pluginDefinition->getClass());
-        $reflectionMethod = $reflectionClass->getMethod($method);
         /** @var \ReflectionParameter[] $parameters */
-        $parameters = $reflectionMethod->getParameters();
-        if (isset($parameters[0]) && $parameters[0]->isArray()) {
+        $parameters = $reflectionClass->getMethod($method)->getParameters();
+
+        if ($this->paramIsArray($parameters)) {
             $definition->addMethodCall($method, array(array_unique($plugin)));
         } else {
             foreach ($plugin as $name => $params) {
                 if (substr($name, 0, 1) !== '_') {
-                    if (count($parameters) == 2 && isset($parameters[1]) && $parameters[1]->isArray()) {
+                    if ($this->paramIsArray($parameters, 1)) {
                         $params = array($name, $params);
                     } else {
                         $params = is_array($params) ? $params : array($params);
@@ -83,5 +82,10 @@ class AutomatonCompilerPass implements CompilerPassInterface
                 }
             }
         }
+    }
+
+    private function paramIsArray($parameters, $index = 0)
+    {
+        return count($parameters) == ($index + 1) && isset($parameters[$index]) && $parameters[$index]->isArray();
     }
 }
