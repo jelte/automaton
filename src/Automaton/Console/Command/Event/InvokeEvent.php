@@ -6,9 +6,6 @@ namespace Automaton\Console\Command\Event;
 
 use Automaton\RuntimeEnvironment;
 use Automaton\Task\ExecutableTaskInterface;
-use Automaton\Task\Task;
-use Automaton\Task\TaskInterface;
-use Symfony\Component\EventDispatcher\Event;
 
 class InvokeEvent extends TaskEvent
 {

@@ -39,4 +39,4 @@ class Role implements RoleInterface
     {
         $this->tasks[] = $task->getName();
     }
-} 
+}

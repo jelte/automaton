@@ -4,10 +4,6 @@
 namespace Automaton\Role;
 
 use Automaton\Plugin\AbstractPlugin;
-use Automaton\Server\Ssh\PhpSecLibConnection;
-use Automaton\Server\Ssh\SshConnection;
-use Automaton\Ssh2\Session;
-use Automaton\Ssh2\Tunnel;
 
 class RolePlugin extends AbstractPlugin
 {
